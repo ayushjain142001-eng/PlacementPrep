@@ -3,7 +3,6 @@ from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
-from socketio import AsyncServer
 from contextlib import asynccontextmanager
 import os
 import logging
@@ -24,9 +23,6 @@ load_dotenv(ROOT_DIR / '.env')
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
-
-# Socket.IO for real-time features
-sio = AsyncServer(async_mode='asgi', cors_allowed_origins='*')
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
