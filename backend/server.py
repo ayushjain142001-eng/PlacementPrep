@@ -574,22 +574,6 @@ async def mark_notification_read(notification_id: str, current_user: dict = Depe
 # Include the router in the main app
 app.include_router(api_router)
 
-# Socket.IO integration
-socket_app = sio.attach(app)
-
-@sio.event
-async def connect(sid, environ):
-    print(f"Client connected: {sid}")
-
-@sio.event
-async def disconnect(sid):
-    print(f"Client disconnected: {sid}")
-
-@sio.event
-async def interview_message(sid, data):
-    # Handle real-time interview messages
-    await sio.emit('interview_response', {'message': 'Response received'}, room=sid)
-
 # CORS
 app.add_middleware(
     CORSMiddleware,
