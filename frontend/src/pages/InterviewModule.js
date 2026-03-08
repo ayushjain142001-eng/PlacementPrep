@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../utils/api';
 import { toast } from 'sonner';
-import { Video, Send, CheckCircle, Trophy } from 'lucide-react';
+import { Video, Send, Trophy, ArrowLeft } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { ScrollArea } from '../components/ui/scroll-area';
@@ -25,15 +25,17 @@ const InterviewModule = () => {
       });
       
       setSession(response.data);
+      const firstQuestion = response.data.questions[0]?.question || 'Hello! Let\'s begin your interview.';
       setMessages([{
         role: 'interviewer',
-        content: `Hello! Let's begin your ${interviewType} interview. ${response.data.questions[0]?.question}`,
+        content: firstQuestion,
         timestamp: new Date()
       }]);
       
       toast.success('Interview started!');
     } catch (error) {
-      toast.error('Failed to start interview');
+      console.error('Interview start error:', error);
+      toast.error(error.response?.data?.detail || 'Failed to start interview. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -49,16 +51,15 @@ const InterviewModule = () => {
     };
     
     setMessages([...messages, userMessage]);
+    const userResponse = currentInput;
     setCurrentInput('');
 
     try {
-      // Submit response
       await api.post(`/interviews/${session.id}/respond`, {
         question_index: currentQuestionIndex,
-        response: currentInput
+        response: userResponse
       });
 
-      // Move to next question or complete
       if (currentQuestionIndex < session.questions.length - 1) {
         const nextIndex = currentQuestionIndex + 1;
         setCurrentQuestionIndex(nextIndex);
@@ -73,7 +74,6 @@ const InterviewModule = () => {
           setMessages(prev => [...prev, interviewerMessage]);
         }, 1000);
       } else {
-        // Complete interview
         const response = await api.post(`/interviews/${session.id}/complete`);
         
         const completionMessage = {
@@ -89,8 +89,16 @@ const InterviewModule = () => {
         toast.success(`Interview completed! Score: ${Math.round(response.data.overall_score)}%`);
       }
     } catch (error) {
+      console.error('Response error:', error);
       toast.error('Failed to submit response');
     }
+  };
+
+  const resetInterview = () => {
+    setSession(null);
+    setMessages([]);
+    setCurrentQuestionIndex(0);
+    setCurrentInput('');
   };
 
   if (!session) {
@@ -158,35 +166,52 @@ const InterviewModule = () => {
             className="w-full btn-glow"
             data-testid="start-interview-btn"
           >
-            {loading ? 'Starting...' : 'Start Interview'}
+            {loading ? (
+              <div className="flex items-center gap-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
+                <span>Starting...</span>
+              </div>
+            ) : (
+              'Start Interview'
+            )}
           </Button>
         </motion.div>
       </div>
     );
   }
 
+  const isComplete = currentQuestionIndex >= session.questions.length;
+
   return (
     <div className="max-w-5xl mx-auto" data-testid="interview-chat">
+      <button
+        onClick={resetInterview}
+        className="flex items-center text-slate-400 hover:text-white transition-colors mb-4"
+      >
+        <ArrowLeft className="w-5 h-5 mr-2" />
+        Back to setup
+      </button>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="glass rounded-2xl overflow-hidden"
       >
-        {/* Header */}
         <div className="bg-slate-900/50 p-6 border-b border-slate-800">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-bold capitalize">{interviewType} Interview</h2>
-              <p className="text-slate-400">Question {currentQuestionIndex + 1} of {session.questions.length}</p>
+              <p className="text-slate-400">Question {Math.min(currentQuestionIndex + 1, session.questions.length)} of {session.questions.length}</p>
             </div>
-            <div className="flex items-center gap-2 glass px-4 py-2 rounded-full">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium">Live</span>
-            </div>
+            {!isComplete && (
+              <div className="flex items-center gap-2 glass px-4 py-2 rounded-full">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium">Live</span>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Chat Messages */}
         <ScrollArea className="h-[500px] p-6">
           <div className="space-y-4">
             <AnimatePresence>
@@ -203,7 +228,7 @@ const InterviewModule = () => {
                       msg.role === 'interviewer'
                         ? 'bg-slate-900/50 border border-slate-800'
                         : msg.role === 'system'
-                        ? 'bg-green-500/10 border border-green-500/30 text-center'
+                        ? 'bg-green-500/10 border border-green-500/30 text-center w-full max-w-full'
                         : 'bg-indigo-500/20 border border-indigo-500/30'
                     }`}
                   >
@@ -223,8 +248,7 @@ const InterviewModule = () => {
           </div>
         </ScrollArea>
 
-        {/* Input */}
-        {currentQuestionIndex < session.questions.length && (
+        {!isComplete && (
           <div className="bg-slate-900/50 p-6 border-t border-slate-800">
             <div className="flex gap-3">
               <Input
@@ -244,6 +268,14 @@ const InterviewModule = () => {
                 <Send className="w-5 h-5" />
               </Button>
             </div>
+          </div>
+        )}
+
+        {isComplete && (
+          <div className="bg-slate-900/50 p-6 border-t border-slate-800 text-center">
+            <Button onClick={resetInterview} className="btn-glow">
+              Start New Interview
+            </Button>
           </div>
         )}
       </motion.div>

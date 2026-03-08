@@ -21,6 +21,9 @@ import ResumeModule from './pages/ResumeModule';
 import RevisionModule from './pages/RevisionModule';
 import ProfilePage from './pages/ProfilePage';
 import AdminPanel from './pages/AdminPanel';
+import LeaderboardPage from './pages/LeaderboardPage';
+import GuidePage from './pages/GuidePage';
+import StudyGroupsPage from './pages/StudyGroupsPage';
 import Layout from './components/Layout';
 
 const ProtectedRoute = ({ children }) => {
@@ -115,6 +118,24 @@ const AppRoutes = () => {
         <Route path="/admin" element={
           <ProtectedRoute>
             <AdminPanel />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/leaderboard" element={
+          <ProtectedRoute>
+            <LeaderboardPage />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/guide" element={
+          <ProtectedRoute>
+            <GuidePage />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/study-groups" element={
+          <ProtectedRoute>
+            <StudyGroupsPage />
           </ProtectedRoute>
         } />
       </Route>

@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Home, Brain, Puzzle, MessageSquare, Code, Video,
   FileText, Calendar, User, Settings, LogOut, Menu,
-  X, Sun, Moon, Trophy, Zap
+  X, Sun, Moon, Trophy, Zap, BookOpen, Users
 } from 'lucide-react';
 
 const Layout = () => {
@@ -24,6 +24,12 @@ const Layout = () => {
     { name: 'Interview', path: '/interview', icon: Video },
     { name: 'Resume', path: '/resume', icon: FileText },
     { name: 'Revision', path: '/revision', icon: Calendar },
+  ];
+  
+  const extraNav = [
+    { name: 'Guide', path: '/guide', icon: BookOpen },
+    { name: 'Study Groups', path: '/study-groups', icon: Users },
+    { name: 'Leaderboard', path: '/leaderboard', icon: Trophy },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -116,6 +122,32 @@ const Layout = () => {
                   );
                 })}
               </nav>
+
+              {/* Extra Navigation */}
+              <div className="border-t border-slate-800/50 pt-4">
+                <p className="text-xs text-slate-500 uppercase tracking-wider px-4 mb-3">Community</p>
+                <nav className="space-y-1">
+                  {extraNav.map((item) => {
+                    const Icon = item.icon;
+                    const active = isActive(item.path);
+                    return (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        data-testid={`nav-${item.name.toLowerCase().replace(' ', '-')}`}
+                        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                          active
+                            ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30'
+                            : 'hover:bg-slate-800/50 text-slate-300 hover:text-white'
+                        }`}
+                      >
+                        <Icon className="w-5 h-5" />
+                        <span className="font-medium">{item.name}</span>
+                      </Link>
+                    );
+                  })}
+                </nav>
+              </div>
 
               {/* Bottom Actions */}
               <div className="pt-6 border-t border-slate-800/50 space-y-2">
