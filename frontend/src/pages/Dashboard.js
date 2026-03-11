@@ -58,22 +58,34 @@ const Dashboard = () => {
 
   const hireReadiness = dashboardData?.analytics?.hire_readiness_score || 0;
   const recommendations = dashboardData?.recommendations || [];
+  const dailyPerformance = dashboardData?.daily_performance || [];
 
-  const performanceData = [
-    { name: 'Mon', score: 65 },
-    { name: 'Tue', score: 72 },
-    { name: 'Wed', score: 68 },
-    { name: 'Thu', score: 85 },
-    { name: 'Fri', score: 78 },
-    { name: 'Sat', score: 82 },
-    { name: 'Sun', score: 90 }
-  ];
+  // Use real performance data or fall back to mock
+  const performanceData = dailyPerformance.length > 0 
+    ? dailyPerformance.map((day, idx) => ({
+        name: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][idx] || day.date.split('-')[2],
+        score: day.score
+      }))
+    : [
+        { name: 'Mon', score: 0 },
+        { name: 'Tue', score: 0 },
+        { name: 'Wed', score: 0 },
+        { name: 'Thu', score: 0 },
+        { name: 'Fri', score: 0 },
+        { name: 'Sat', score: 0 },
+        { name: 'Sun', score: 0 }
+      ];
 
-  const skillData = [
-    { skill: 'Coding', value: 75 },
-    { skill: 'Aptitude', value: 68 },
-    { skill: 'Communication', value: 82 },
-    { skill: 'Reasoning', value: 70 }
+  // Calculate skill data from analytics
+  const analyticsData = dashboardData?.analytics;
+  const skillData = analyticsData?.test_performance?.map(perf => ({
+    skill: perf.category.charAt(0).toUpperCase() + perf.category.slice(1),
+    value: Math.round(perf.score)
+  })) || [
+    { skill: 'Coding', value: 0 },
+    { skill: 'Aptitude', value: 0 },
+    { skill: 'Communication', value: 0 },
+    { skill: 'Reasoning', value: 0 }
   ];
 
   const modules = [
