@@ -62,8 +62,8 @@ const LandingPage = () => {
               <Zap className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold gradient-text font-heading">Placify AI</h1>
-              <p className="text-xs text-slate-400">Your Personal Career Coach</p>
+              <h1 className="text-xl font-bold gradient-text font-heading">PlacementPrep</h1>
+              <p className="text-xs text-slate-400">Your Ultimate Placement Preparation Platform</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -171,7 +171,7 @@ const LandingPage = () => {
           className="glass p-12 rounded-3xl text-center space-y-6 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border-indigo-500/30"
         >
           <h2 className="text-4xl md:text-5xl font-bold font-heading">Ready to Get Hired?</h2>
-          <p className="text-lg text-slate-300 max-w-2xl mx-auto">Join thousands of students who landed their dream jobs with Placify AI</p>
+          <p className="text-lg text-slate-300 max-w-2xl mx-auto">Join thousands of students who landed their dream jobs with PlacementPrep</p>
           <Link to="/signup">
             <Button size="lg" className="btn-glow rounded-full px-8 text-lg" data-testid="cta-get-started-btn">
               Start Your Journey
@@ -184,7 +184,7 @@ const LandingPage = () => {
       {/* Footer */}
       <footer className="relative z-10 bg-slate-950/80 backdrop-blur-xl border-t border-slate-800/50 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-slate-400">
-          <p>&copy; 2026 Placify AI. Built with ❤️ for aspiring engineers.</p>
+          <p>&copy; 2026 PlacementPrep. Built with ❤️ for aspiring engineers.</p>
         </div>
       </footer>
     </div>

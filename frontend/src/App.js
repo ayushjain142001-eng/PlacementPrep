@@ -10,6 +10,7 @@ import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import OnboardingFlow from './pages/OnboardingFlow';
 import Dashboard from './pages/Dashboard';
 import AptitudeModule from './pages/AptitudeModule';
@@ -53,6 +54,7 @@ const AppRoutes = () => {
       <Route path="/login" element={user ? <Navigate to="/dashboard" /> : <LoginPage />} />
       <Route path="/signup" element={user ? <Navigate to="/dashboard" /> : <SignupPage />} />
       <Route path="/forgot-password" element={user ? <Navigate to="/dashboard" /> : <ForgotPasswordPage />} />
+      <Route path="/reset-password" element={user ? <Navigate to="/dashboard" /> : <ResetPasswordPage />} />
       
       <Route path="/onboarding" element={
         <ProtectedRoute>

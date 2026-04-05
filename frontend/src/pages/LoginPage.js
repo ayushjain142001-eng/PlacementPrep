@@ -75,8 +75,8 @@ const LoginPage = () => {
             <Zap className="w-7 h-7 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold gradient-text font-heading">Placify AI</h1>
-            <p className="text-xs text-slate-400">Your Personal Career Coach</p>
+            <h1 className="text-2xl font-bold gradient-text font-heading">PlacementPrep</h1>
+            <p className="text-xs text-slate-400">Your Ultimate Placement Preparation Platform</p>
           </div>
         </Link>
 

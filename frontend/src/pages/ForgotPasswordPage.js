@@ -25,12 +25,11 @@ const ForgotPasswordPage = () => {
     setLoading(true);
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await api.post('/auth/forgot-password', { email });
       setSent(true);
-      toast.success('Password reset link sent to your email!');
+      toast.success('Password reset instructions sent!');
     } catch (err) {
-      toast.error('Failed to send reset link');
+      toast.error('Failed to send reset link. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -82,8 +81,8 @@ const ForgotPasswordPage = () => {
             <Zap className="w-7 h-7 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold gradient-text font-heading">Placify AI</h1>
-            <p className="text-xs text-slate-400">Your Personal Career Coach</p>
+            <h1 className="text-2xl font-bold gradient-text font-heading">PlacementPrep</h1>
+            <p className="text-xs text-slate-400">Your Ultimate Placement Preparation Platform</p>
           </div>
         </Link>
 

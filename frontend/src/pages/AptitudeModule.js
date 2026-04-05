@@ -74,6 +74,9 @@ const AptitudeModule = () => {
 
   const startMode = async (selectedMode) => {
     setMode(selectedMode);
+    setCurrentQuestion(0);
+    setResults([]);
+    setSelectedAnswer(null);
     await fetchQuestions(selectedCategory.id, selectedMode);
     setView(selectedMode === 'practice' ? 'practice' : 'test');
     setIsActive(true);

@@ -36,7 +36,7 @@ const OnboardingFlow = () => {
     try {
       await api.post('/onboarding/complete');
       await refreshUser();
-      toast.success('Onboarding completed! Welcome to Placify AI 🎉');
+      toast.success('Onboarding completed! Welcome to PlacementPrep 🎉');
       navigate('/dashboard');
     } catch (error) {
       toast.error('Failed to complete onboarding');

@@ -61,7 +61,7 @@ const Layout = () => {
                     <Zap className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h1 className="text-xl font-bold gradient-text">Placify AI</h1>
+                    <h1 className="text-xl font-bold gradient-text">PlacementPrep</h1>
                     <p className="text-xs text-slate-400">Career Coach</p>
                   </div>
                 </Link>
@@ -202,7 +202,7 @@ const Layout = () => {
             
             <div className="flex-1 lg:flex-none">
               <h2 className="text-xl font-bold font-heading">
-                {navigation.find(item => item.path === location.pathname)?.name || 'Placify AI'}
+                {navigation.find(item => item.path === location.pathname)?.name || 'PlacementPrep'}
               </h2>
             </div>
 

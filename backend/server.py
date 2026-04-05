@@ -15,6 +15,7 @@ from models import *
 from auth import *
 from ai_engine import AIEngine
 from question_bank import QuestionBank
+from pydantic import EmailStr
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -38,6 +39,9 @@ app = FastAPI(lifespan=lifespan)
 api_router = APIRouter(prefix="/api")
 
 # ============ AUTH ROUTES ============
+
+# In-memory storage for reset tokens (in production, use Redis or database)
+reset_tokens = {}
 
 @api_router.post("/auth/signup", response_model=Token)
 async def signup(user_data: UserCreate):
@@ -106,6 +110,48 @@ async def get_current_user_info(current_user: dict = Depends(get_current_user)):
     profile = await db.profiles.find_one({"user_id": current_user['user_id']}, {"_id": 0})
     
     return {"user": user, "profile": profile}
+
+@api_router.post("/auth/forgot-password")
+async def forgot_password(email: EmailStr):
+    user = await db.users.find_one({"email": email}, {"_id": 0})
+    if not user:
+        # Don't reveal if user exists or not
+        return {"message": "If this email is registered, you will receive a password reset link"}
+    
+    # Generate reset token
+    reset_token = str(uuid.uuid4())
+    reset_tokens[reset_token] = {
+        "email": email,
+        "expires": (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
+    }
+    
+    # In production, send email here
+    # For now, we'll just log it
+    print(f"Password reset link: /reset-password?token={reset_token}")
+    
+    return {"message": "If this email is registered, you will receive a password reset link"}
+
+@api_router.post("/auth/reset-password")
+async def reset_password(token: str, new_password: str):
+    if token not in reset_tokens:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset token")
+    
+    token_data = reset_tokens[token]
+    if datetime.fromisoformat(token_data["expires"]) < datetime.now(timezone.utc):
+        del reset_tokens[token]
+        raise HTTPException(status_code=400, detail="Reset token has expired")
+    
+    # Update password
+    hashed_password = get_password_hash(new_password)
+    await db.users.update_one(
+        {"email": token_data["email"]},
+        {"$set": {"password_hash": hashed_password}}
+    )
+    
+    # Remove used token
+    del reset_tokens[token]
+    
+    return {"message": "Password reset successful"}
 
 # ============ ONBOARDING ROUTES ============
 
