@@ -125,11 +125,16 @@ async def forgot_password(email: EmailStr):
         "expires": (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
     }
     
-    # In production, send email here
-    # For now, we'll just log it
-    print(f"Password reset link: /reset-password?token={reset_token}")
+    # For development: log and return the reset link
+    reset_link = f"/reset-password?token={reset_token}"
+    print(f"[DEV] Password reset link: {reset_link}")
     
-    return {"message": "If this email is registered, you will receive a password reset link"}
+    # In production, send email here and don't return the link
+    # For development/testing, return the link
+    return {
+        "message": "If this email is registered, you will receive a password reset link",
+        "dev_reset_link": reset_link  # Remove this in production
+    }
 
 @api_router.post("/auth/reset-password")
 async def reset_password(token: str, new_password: str):

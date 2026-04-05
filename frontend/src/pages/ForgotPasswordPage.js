@@ -14,6 +14,7 @@ const ForgotPasswordPage = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const [devResetLink, setDevResetLink] = useState('');
   const { theme } = useTheme();
 
   const handleSubmit = async (e) => {
@@ -28,8 +29,12 @@ const ForgotPasswordPage = () => {
     setLoading(true);
     
     try {
-      await api.post('/auth/forgot-password', { email });
+      const response = await api.post('/auth/forgot-password', { email });
       setSent(true);
+      // Store dev reset link if provided
+      if (response.data.dev_reset_link) {
+        setDevResetLink(response.data.dev_reset_link);
+      }
       toast.success('Password reset instructions sent!');
     } catch (err) {
       toast.error('Failed to send reset link. Please try again.');
@@ -56,6 +61,25 @@ const ForgotPasswordPage = () => {
           <p className="text-sm text-muted-foreground">
             Didn't receive the email? Check your spam folder or try again.
           </p>
+          
+          {/* Development only: Show reset link directly */}
+          {devResetLink && (
+            <div className="mt-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+              <p className="text-sm text-yellow-500 font-semibold mb-2">
+                🔧 Development Mode
+              </p>
+              <p className="text-xs text-foreground mb-3">
+                No email service configured. Use this link to reset your password:
+              </p>
+              <Link 
+                to={devResetLink}
+                className="text-sm text-indigo-400 hover:text-indigo-300 underline break-all"
+              >
+                {window.location.origin}{devResetLink}
+              </Link>
+            </div>
+          )}
+          
           <Link to="/login">
             <Button className="w-full btn-glow">
               <ArrowLeft className="w-4 h-4 mr-2" />

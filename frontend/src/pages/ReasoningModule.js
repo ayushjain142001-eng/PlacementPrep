@@ -189,7 +189,7 @@ const ReasoningModule = () => {
           >
             <Target className="w-16 h-16 text-indigo-400 mx-auto mb-4" />
             <h3 className="text-2xl font-bold mb-2">Practice Mode</h3>
-            <p className="text-muted-foreground mb-4">8 questions • Learn at your pace • Instant feedback</p>
+            <p className="text-muted-foreground mb-4">10 questions • Learn at your pace • Instant feedback</p>
             <Button className="btn-glow">
               <Play className="w-5 h-5 mr-2" />
               Start Practice
@@ -204,7 +204,7 @@ const ReasoningModule = () => {
           >
             <BarChart3 className="w-16 h-16 text-purple-400 mx-auto mb-4" />
             <h3 className="text-2xl font-bold mb-2">Test Mode</h3>
-            <p className="text-muted-foreground mb-4">15 questions • Timed • Performance tracking</p>
+            <p className="text-muted-foreground mb-4">20 questions • Timed • Performance tracking</p>
             <Button className="btn-glow">
               <Play className="w-5 h-5 mr-2" />
               Start Test
