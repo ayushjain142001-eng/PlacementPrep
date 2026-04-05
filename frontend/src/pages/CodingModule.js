@@ -95,7 +95,7 @@ const CodingModule = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold mb-2">Coding Practice</h1>
-          <p className="text-slate-400">
+          <p className="text-muted-foreground">
             Question {currentQuestion + 1} of {questions.length}
           </p>
         </div>
@@ -103,7 +103,7 @@ const CodingModule = () => {
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="glass px-4 py-2 rounded-lg border border-slate-800 focus:border-indigo-500 outline-none"
+            className="glass px-4 py-2 rounded-lg border border-border focus:border-indigo-500 outline-none"
             data-testid="language-selector"
           >
             <option value="python">Python</option>
@@ -133,14 +133,14 @@ const CodingModule = () => {
               </span>
             </div>
 
-            <p className="text-slate-300 whitespace-pre-line">{question.description}</p>
+            <p className="text-foreground whitespace-pre-line">{question.description}</p>
 
             {/* Test Cases */}
             <div className="space-y-2">
               <h3 className="font-semibold text-lg">Test Cases:</h3>
               {question.test_cases?.map((tc, idx) => (
-                <div key={idx} className="bg-slate-900/50 p-3 rounded-lg text-sm font-mono">
-                  <div className="text-slate-400">Input: {JSON.stringify(tc.input)}</div>
+                <div key={idx} className="bg-card/50 p-3 rounded-lg text-sm font-mono">
+                  <div className="text-muted-foreground">Input: {JSON.stringify(tc.input)}</div>
                   <div className="text-green-400">Output: {JSON.stringify(tc.output)}</div>
                 </div>
               ))}
@@ -169,14 +169,14 @@ const CodingModule = () => {
               </h3>
               
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-slate-900/50 p-4 rounded-lg">
-                  <div className="text-sm text-slate-400">Test Cases Passed</div>
+                <div className="bg-card/50 p-4 rounded-lg">
+                  <div className="text-sm text-muted-foreground">Test Cases Passed</div>
                   <div className="text-2xl font-bold text-green-400">
                     {testResults.passed_tests} / {testResults.total_tests}
                   </div>
                 </div>
-                <div className="bg-slate-900/50 p-4 rounded-lg">
-                  <div className="text-sm text-slate-400">Code Quality</div>
+                <div className="bg-card/50 p-4 rounded-lg">
+                  <div className="text-sm text-muted-foreground">Code Quality</div>
                   <div className="text-2xl font-bold text-indigo-400">
                     {testResults.quality}/30
                   </div>
@@ -187,7 +187,7 @@ const CodingModule = () => {
                 <div className="space-y-2">
                   <h4 className="font-medium">Feedback:</h4>
                   {testResults.feedback.map((fb, idx) => (
-                    <div key={idx} className="flex items-start gap-2 text-sm text-slate-300">
+                    <div key={idx} className="flex items-start gap-2 text-sm text-foreground">
                       <span className="text-yellow-500">•</span>
                       {fb}
                     </div>
@@ -258,8 +258,8 @@ const CodingModule = () => {
               </TabsContent>
 
               <TabsContent value="output">
-                <div className="bg-slate-900 rounded-lg p-4 h-[500px] overflow-auto font-mono text-sm">
-                  <pre className="text-slate-300 whitespace-pre-wrap">
+                <div className="bg-card rounded-lg p-4 h-[500px] overflow-auto font-mono text-sm">
+                  <pre className="text-foreground whitespace-pre-wrap">
                     {output || 'Output will appear here...'}
                   </pre>
                 </div>

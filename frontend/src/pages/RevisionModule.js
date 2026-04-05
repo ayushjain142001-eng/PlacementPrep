@@ -128,7 +128,7 @@ const RevisionModule = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-4xl font-bold mb-2">Revision Planner</h1>
-          <p className="text-slate-400">Spaced repetition for better retention</p>
+          <p className="text-muted-foreground">Spaced repetition for better retention</p>
         </div>
         <Button onClick={() => setShowAddForm(!showAddForm)} className="btn-glow">
           <Plus className="w-5 h-5 mr-2" />
@@ -144,7 +144,7 @@ const RevisionModule = () => {
           className="glass p-6 rounded-2xl"
         >
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-slate-400">Overdue</span>
+            <span className="text-sm text-muted-foreground">Overdue</span>
             <Clock className="w-5 h-5 text-red-500" />
           </div>
           <div className="text-4xl font-bold text-red-400">{overdueItems.length}</div>
@@ -157,7 +157,7 @@ const RevisionModule = () => {
           className="glass p-6 rounded-2xl"
         >
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-slate-400">Due Today</span>
+            <span className="text-sm text-muted-foreground">Due Today</span>
             <Target className="w-5 h-5 text-yellow-500" />
           </div>
           <div className="text-4xl font-bold text-yellow-400">{todayItems.length}</div>
@@ -170,7 +170,7 @@ const RevisionModule = () => {
           className="glass p-6 rounded-2xl"
         >
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-slate-400">Total Topics</span>
+            <span className="text-sm text-muted-foreground">Total Topics</span>
             <Brain className="w-5 h-5 text-indigo-500" />
           </div>
           <div className="text-4xl font-bold text-indigo-400">{revisionItems.length}</div>
@@ -190,20 +190,20 @@ const RevisionModule = () => {
               placeholder="Topic name"
               value={newTopic.topic}
               onChange={(e) => setNewTopic({ ...newTopic, topic: e.target.value })}
-              className="bg-slate-900/50 border-slate-800"
+              className="bg-card/50 border-border"
             />
             <Input
               placeholder="Category (e.g., DSA, Frontend)"
               value={newTopic.category}
               onChange={(e) => setNewTopic({ ...newTopic, category: e.target.value })}
-              className="bg-slate-900/50 border-slate-800"
+              className="bg-card/50 border-border"
             />
           </div>
           <Textarea
             placeholder="Notes (optional)"
             value={newTopic.notes}
             onChange={(e) => setNewTopic({ ...newTopic, notes: e.target.value })}
-            className="bg-slate-900/50 border-slate-800"
+            className="bg-card/50 border-border"
             rows={3}
           />
           <div className="flex gap-3">
@@ -231,7 +231,7 @@ const RevisionModule = () => {
                     <h3 className="text-xl font-bold">{item.topic}</h3>
                     <span className="px-3 py-1 bg-slate-700 rounded-full text-xs">{item.category}</span>
                   </div>
-                  {item.notes && <p className="text-slate-400 text-sm mb-3">{item.notes}</p>}
+                  {item.notes && <p className="text-muted-foreground text-sm mb-3">{item.notes}</p>}
                   <div className="flex items-center gap-4 text-sm text-slate-500">
                     <span>Reviews: {item.review_count}</span>
                     <span>•</span>
@@ -266,7 +266,7 @@ const RevisionModule = () => {
                     <h3 className="text-xl font-bold">{item.topic}</h3>
                     <span className="px-3 py-1 bg-slate-700 rounded-full text-xs">{item.category}</span>
                   </div>
-                  {item.notes && <p className="text-slate-400 text-sm mb-3">{item.notes}</p>}
+                  {item.notes && <p className="text-muted-foreground text-sm mb-3">{item.notes}</p>}
                   <div className="flex items-center gap-4 text-sm text-slate-500">
                     <span>Reviews: {item.review_count}</span>
                   </div>
@@ -299,7 +299,7 @@ const RevisionModule = () => {
                     <h3 className="text-xl font-bold">{item.topic}</h3>
                     <span className="px-3 py-1 bg-slate-700 rounded-full text-xs">{item.category}</span>
                   </div>
-                  {item.notes && <p className="text-slate-400 text-sm mb-3">{item.notes}</p>}
+                  {item.notes && <p className="text-muted-foreground text-sm mb-3">{item.notes}</p>}
                   <div className="flex items-center gap-4 text-sm text-slate-500">
                     <span>Reviews: {item.review_count}</span>
                     <span>•</span>
@@ -314,9 +314,9 @@ const RevisionModule = () => {
 
       {revisionItems.length === 0 && (
         <div className="glass p-12 rounded-2xl text-center">
-          <CalendarIcon className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+          <CalendarIcon className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
           <h3 className="text-2xl font-bold mb-2">No topics yet</h3>
-          <p className="text-slate-400 mb-6">Start adding topics to create your revision schedule</p>
+          <p className="text-muted-foreground mb-6">Start adding topics to create your revision schedule</p>
           <Button onClick={() => setShowAddForm(true)} className="btn-glow">
             <Plus className="w-5 h-5 mr-2" />
             Add Your First Topic

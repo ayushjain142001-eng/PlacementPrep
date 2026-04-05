@@ -78,7 +78,7 @@ const ResumeModule = () => {
     <div className="max-w-5xl mx-auto space-y-8" data-testid="resume-module">
       <div>
         <h1 className="text-4xl font-bold mb-2">Resume Analysis</h1>
-        <p className="text-slate-400">Upload your resume and get AI-powered feedback</p>
+        <p className="text-muted-foreground">Upload your resume and get AI-powered feedback</p>
       </div>
 
       {!analysis ? (
@@ -94,7 +94,7 @@ const ResumeModule = () => {
             
             <div>
               <h2 className="text-2xl font-bold mb-2">Upload Your Resume</h2>
-              <p className="text-slate-400">PDF format, max 5MB</p>
+              <p className="text-muted-foreground">PDF format, max 5MB</p>
             </div>
 
             <div className="border-2 border-dashed border-slate-700 rounded-xl p-12 hover:border-indigo-500 transition-colors">
@@ -107,7 +107,7 @@ const ResumeModule = () => {
               />
               <label htmlFor="resume-upload" className="cursor-pointer">
                 <div className="flex flex-col items-center gap-4">
-                  <Upload className="w-16 h-16 text-slate-400" />
+                  <Upload className="w-16 h-16 text-muted-foreground" />
                   <div>
                     <p className="text-lg font-semibold">Click to upload or drag and drop</p>
                     <p className="text-sm text-slate-500">PDF files only</p>
@@ -156,7 +156,7 @@ const ResumeModule = () => {
             <div className="flex items-center gap-6">
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-slate-400">Overall Score</span>
+                  <span className="text-muted-foreground">Overall Score</span>
                   <span className="text-3xl font-bold gradient-text">{analysis.completeness}%</span>
                 </div>
                 <Progress value={analysis.completeness} className="h-4" />
@@ -179,15 +179,15 @@ const ResumeModule = () => {
           {/* Key Info */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="glass p-6 rounded-2xl">
-              <div className="text-sm text-slate-400 mb-2">Experience</div>
+              <div className="text-sm text-muted-foreground mb-2">Experience</div>
               <div className="text-3xl font-bold">{analysis.years_experience} years</div>
             </div>
             <div className="glass p-6 rounded-2xl">
-              <div className="text-sm text-slate-400 mb-2">Projects</div>
+              <div className="text-sm text-muted-foreground mb-2">Projects</div>
               <div className="text-3xl font-bold">{analysis.projects_count}</div>
             </div>
             <div className="glass p-6 rounded-2xl">
-              <div className="text-sm text-slate-400 mb-2">Education</div>
+              <div className="text-sm text-muted-foreground mb-2">Education</div>
               <div className="text-lg font-bold">{analysis.education.join(', ')}</div>
             </div>
           </div>
@@ -202,7 +202,7 @@ const ResumeModule = () => {
               {analysis.strengths.map((strength, idx) => (
                 <div key={idx} className="flex items-start gap-3 bg-green-500/10 p-4 rounded-lg border border-green-500/30">
                   <span className="text-green-400">✓</span>
-                  <span className="text-slate-300">{strength}</span>
+                  <span className="text-foreground">{strength}</span>
                 </div>
               ))}
             </div>
@@ -218,7 +218,7 @@ const ResumeModule = () => {
               {analysis.improvements.map((improvement, idx) => (
                 <div key={idx} className="flex items-start gap-3 bg-yellow-500/10 p-4 rounded-lg border border-yellow-500/30">
                   <span className="text-yellow-400">⚠️</span>
-                  <span className="text-slate-300">{improvement}</span>
+                  <span className="text-foreground">{improvement}</span>
                 </div>
               ))}
             </div>
@@ -234,7 +234,7 @@ const ResumeModule = () => {
               {analysis.suggestions.map((suggestion, idx) => (
                 <div key={idx} className="flex items-start gap-3 bg-indigo-500/10 p-4 rounded-lg border border-indigo-500/30">
                   <span className="text-indigo-400">💡</span>
-                  <span className="text-slate-300">{suggestion}</span>
+                  <span className="text-foreground">{suggestion}</span>
                 </div>
               ))}
             </div>

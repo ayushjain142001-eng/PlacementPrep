@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { toast } from 'sonner';
 import { Zap, Mail, Lock } from 'lucide-react';
 import { Button } from '../components/ui/button';
@@ -13,6 +14,7 @@ const LoginPage = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const { theme } = useTheme();
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -59,10 +61,10 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 transition-colors duration-300">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 -left-4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob" />
-        <div className="absolute top-0 -right-4 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000" />
+        <div className={`absolute top-0 -left-4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl ${theme === 'dark' ? 'opacity-10' : 'opacity-5'} animate-blob`} />
+        <div className={`absolute top-0 -right-4 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl ${theme === 'dark' ? 'opacity-10' : 'opacity-5'} animate-blob animation-delay-2000`} />
       </div>
 
       <motion.div
@@ -76,26 +78,26 @@ const LoginPage = () => {
           </div>
           <div>
             <h1 className="text-2xl font-bold gradient-text font-heading">PlacementPrep</h1>
-            <p className="text-xs text-slate-400">Your Ultimate Placement Preparation Platform</p>
+            <p className="text-xs text-muted-foreground">Your Ultimate Placement Preparation Platform</p>
           </div>
         </Link>
 
-        <div className="glass p-8 rounded-2xl border border-slate-800/50">
+        <div className="glass p-8 rounded-2xl border border-border/50">
           <h2 className="text-3xl font-bold font-heading mb-2">Welcome Back</h2>
-          <p className="text-slate-400 mb-6">Sign in to continue your learning journey</p>
+          <p className="text-muted-foreground mb-6">Sign in to continue your learning journey</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Email</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Email</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   type="email"
                   value={formData.email}
                   onChange={(e) => handleChange('email', e.target.value)}
                   placeholder="you@example.com"
                   data-testid="login-email-input"
-                  className={`pl-10 bg-slate-900/50 border-slate-800 focus:border-indigo-500 rounded-lg ${
+                  className={`pl-10 bg-card/50 border-border focus:border-indigo-500 rounded-lg ${
                     errors.email ? 'border-red-500' : ''
                   }`}
                 />
@@ -107,20 +109,20 @@ const LoginPage = () => {
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-slate-300">Password</label>
+                <label className="block text-sm font-medium text-foreground">Password</label>
                 <Link to="/forgot-password" className="text-sm text-indigo-400 hover:text-indigo-300">
                   Forgot?
                 </Link>
               </div>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   type="password"
                   value={formData.password}
                   onChange={(e) => handleChange('password', e.target.value)}
                   placeholder="••••••••"
                   data-testid="login-password-input"
-                  className={`pl-10 bg-slate-900/50 border-slate-800 focus:border-indigo-500 rounded-lg ${
+                  className={`pl-10 bg-card/50 border-border focus:border-indigo-500 rounded-lg ${
                     errors.password ? 'border-red-500' : ''
                   }`}
                 />
@@ -153,7 +155,7 @@ const LoginPage = () => {
             </Button>
           </form>
 
-          <p className="mt-6 text-center text-slate-400">
+          <p className="mt-6 text-center text-muted-foreground">
             Don't have an account?{' '}
             <Link to="/signup" className="text-indigo-400 hover:text-indigo-300 font-semibold" data-testid="goto-signup-link">
               Sign up

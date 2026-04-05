@@ -1,10 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useTheme } from '../contexts/ThemeContext';
 import { Zap, Brain, Code, Target, TrendingUp, Users, ArrowRight, CheckCircle, Star } from 'lucide-react';
 import { Button } from '../components/ui/button';
 
 const LandingPage = () => {
+  const { theme } = useTheme();
+  
   const features = [
     {
       icon: Brain,
@@ -46,16 +49,16 @@ const LandingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-hidden">
+    <div className="min-h-screen bg-background overflow-hidden transition-colors duration-300">
       {/* Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 -left-4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob" />
-        <div className="absolute top-0 -right-4 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000" />
+        <div className={`absolute top-0 -left-4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl ${theme === 'dark' ? 'opacity-10' : 'opacity-5'} animate-blob`} />
+        <div className={`absolute top-0 -right-4 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl ${theme === 'dark' ? 'opacity-10' : 'opacity-5'} animate-blob animation-delay-2000`} />
         <div className="absolute -bottom-8 left-20 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-4000" />
       </div>
 
       {/* Navigation */}
-      <nav className="relative z-10 bg-slate-950/50 backdrop-blur-xl border-b border-slate-800/50">
+      <nav className="relative z-10 bg-background/50 backdrop-blur-xl border-b border-border/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center">
@@ -63,7 +66,7 @@ const LandingPage = () => {
             </div>
             <div>
               <h1 className="text-xl font-bold gradient-text font-heading">PlacementPrep</h1>
-              <p className="text-xs text-slate-400">Your Ultimate Placement Preparation Platform</p>
+              <p className="text-xs text-muted-foreground">Your Ultimate Placement Preparation Platform</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -100,7 +103,7 @@ const LandingPage = () => {
             <span className="text-slate-200">With AI Coaching</span>
           </h1>
           
-          <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-foreground max-w-3xl mx-auto leading-relaxed">
             Master aptitude, coding, communication, and interviews with personalized AI guidance.
             Built for engineering students and developers preparing for top tech companies.
           </p>
@@ -125,7 +128,7 @@ const LandingPage = () => {
                 className="glass p-6 rounded-2xl"
               >
                 <div className="text-3xl md:text-4xl font-bold gradient-text">{stat.value}</div>
-                <div className="text-sm text-slate-400 mt-1">{stat.label}</div>
+                <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -136,7 +139,7 @@ const LandingPage = () => {
       <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold font-heading mb-4">Everything You Need to Succeed</h2>
-          <p className="text-lg text-slate-300 max-w-2xl mx-auto">Comprehensive preparation tools designed for placement success</p>
+          <p className="text-lg text-foreground max-w-2xl mx-auto">Comprehensive preparation tools designed for placement success</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -155,7 +158,7 @@ const LandingPage = () => {
                   <Icon className="w-6 h-6 text-indigo-400" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-slate-400">{feature.description}</p>
+                <p className="text-muted-foreground">{feature.description}</p>
               </motion.div>
             );
           })}
@@ -171,7 +174,7 @@ const LandingPage = () => {
           className="glass p-12 rounded-3xl text-center space-y-6 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border-indigo-500/30"
         >
           <h2 className="text-4xl md:text-5xl font-bold font-heading">Ready to Get Hired?</h2>
-          <p className="text-lg text-slate-300 max-w-2xl mx-auto">Join thousands of students who landed their dream jobs with PlacementPrep</p>
+          <p className="text-lg text-foreground max-w-2xl mx-auto">Join thousands of students who landed their dream jobs with PlacementPrep</p>
           <Link to="/signup">
             <Button size="lg" className="btn-glow rounded-full px-8 text-lg" data-testid="cta-get-started-btn">
               Start Your Journey
@@ -182,8 +185,8 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 bg-slate-950/80 backdrop-blur-xl border-t border-slate-800/50 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-slate-400">
+      <footer className="relative z-10 bg-background/80 backdrop-blur-xl border-t border-border/50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-muted-foreground">
           <p>&copy; 2026 PlacementPrep. Built with ❤️ for aspiring engineers.</p>
         </div>
       </footer>

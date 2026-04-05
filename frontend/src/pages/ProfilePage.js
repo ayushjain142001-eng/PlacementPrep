@@ -72,17 +72,17 @@ const ProfilePage = () => {
           </div>
 
           <div className="space-y-4">
-            <div className="bg-slate-900/50 p-4 rounded-xl">
+            <div className="bg-card/50 p-4 rounded-xl">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-slate-400">Level</span>
+                <span className="text-sm text-muted-foreground">Level</span>
                 <Trophy className="w-5 h-5 text-yellow-500" />
               </div>
               <div className="text-3xl font-bold">{profile?.level || 1}</div>
             </div>
 
-            <div className="bg-slate-900/50 p-4 rounded-xl">
+            <div className="bg-card/50 p-4 rounded-xl">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-slate-400">Total XP</span>
+                <span className="text-sm text-muted-foreground">Total XP</span>
                 <Zap className="w-5 h-5 text-yellow-500" />
               </div>
               <div className="text-3xl font-bold">{profile?.xp || 0}</div>
@@ -90,17 +90,17 @@ const ProfilePage = () => {
               <p className="text-xs text-slate-500 mt-1">{100 - levelProgress} XP to next level</p>
             </div>
 
-            <div className="bg-slate-900/50 p-4 rounded-xl">
+            <div className="bg-card/50 p-4 rounded-xl">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-slate-400">Streak</span>
+                <span className="text-sm text-muted-foreground">Streak</span>
                 <span className="text-2xl">🔥</span>
               </div>
               <div className="text-3xl font-bold">{profile?.streak_days || 0} days</div>
             </div>
 
-            <div className="bg-slate-900/50 p-4 rounded-xl">
+            <div className="bg-card/50 p-4 rounded-xl">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-slate-400">Hire Readiness</span>
+                <span className="text-sm text-muted-foreground">Hire Readiness</span>
                 <Target className="w-5 h-5 text-indigo-500" />
               </div>
               <div className="text-3xl font-bold gradient-text">{Math.round(profile?.hire_readiness_score || 0)}%</div>
@@ -122,7 +122,7 @@ const ProfilePage = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   <User className="w-4 h-4 inline mr-2" />
                   Full Name
                 </label>
@@ -130,7 +130,7 @@ const ProfilePage = () => {
                   <Input
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="bg-slate-900/50 border-slate-800"
+                    className="bg-card/50 border-border"
                   />
                 ) : (
                   <p className="text-lg">{profile?.name || 'Not set'}</p>
@@ -138,11 +138,11 @@ const ProfilePage = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   <Mail className="w-4 h-4 inline mr-2" />
                   Email
                 </label>
-                <p className="text-lg text-slate-400">{profile?.email || 'Not set'}</p>
+                <p className="text-lg text-muted-foreground">{profile?.email || 'Not set'}</p>
               </div>
             </div>
           </div>
@@ -153,7 +153,7 @@ const ProfilePage = () => {
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   <Target className="w-4 h-4 inline mr-2" />
                   Target Role
                 </label>
@@ -162,7 +162,7 @@ const ProfilePage = () => {
                     value={formData.target_role}
                     onChange={(e) => setFormData({...formData, target_role: e.target.value})}
                     placeholder="e.g., Software Engineer"
-                    className="bg-slate-900/50 border-slate-800"
+                    className="bg-card/50 border-border"
                   />
                 ) : (
                   <p className="text-lg">{profile?.target_role || 'Not set'}</p>

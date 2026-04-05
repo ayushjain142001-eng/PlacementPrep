@@ -56,7 +56,7 @@ const GuidePage = () => {
           <BookOpen className="w-10 h-10 text-white" />
         </div>
         <h1 className="text-5xl font-bold mb-4">Success Guide</h1>
-        <p className="text-xl text-slate-300 max-w-2xl mx-auto">
+        <p className="text-xl text-foreground max-w-2xl mx-auto">
           Your complete roadmap to crack technical interviews and land your dream job
         </p>
       </motion.div>
@@ -84,7 +84,7 @@ const GuidePage = () => {
                       <span className="text-2xl font-bold gradient-text">{idx + 1}</span>
                       <h3 className="text-xl font-bold">{step.title}</h3>
                     </div>
-                    <p className="text-slate-400 mb-4">{step.description}</p>
+                    <p className="text-muted-foreground mb-4">{step.description}</p>
                     <Link to={step.link}>
                       <Button size="sm" className="btn-glow">{step.action}</Button>
                     </Link>
@@ -109,10 +109,10 @@ const GuidePage = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: idx * 0.1 }}
-              className="flex items-start gap-3 bg-slate-900/50 p-4 rounded-lg"
+              className="flex items-start gap-3 bg-card/50 p-4 rounded-lg"
             >
               <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-              <span className="text-slate-300">{tip}</span>
+              <span className="text-foreground">{tip}</span>
             </motion.div>
           ))}
         </div>
@@ -123,9 +123,9 @@ const GuidePage = () => {
         <h2 className="text-3xl font-bold mb-6">Sample Weekly Schedule</h2>
         <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
           {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, idx) => (
-            <div key={day} className="bg-slate-900/50 p-4 rounded-lg">
+            <div key={day} className="bg-card/50 p-4 rounded-lg">
               <div className="font-bold mb-2">{day}</div>
-              <div className="text-sm text-slate-400 space-y-1">
+              <div className="text-sm text-muted-foreground space-y-1">
                 {idx < 5 ? (
                   <>
                     <div>DSA: 2hr</div>

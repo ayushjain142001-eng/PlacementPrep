@@ -105,7 +105,7 @@ const CommunicationModule = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold mb-2">Communication Practice</h1>
-          <p className="text-slate-400">
+          <p className="text-muted-foreground">
             Question {currentQuestion + 1} of {questions.length}
           </p>
         </div>
@@ -128,7 +128,7 @@ const CommunicationModule = () => {
               {question.difficulty}
             </span>
             <h2 className="text-2xl font-bold mb-3">{question.title}</h2>
-            <p className="text-slate-300 text-lg">{question.description}</p>
+            <p className="text-foreground text-lg">{question.description}</p>
           </div>
           <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center flex-shrink-0">
             <MessageSquare className="w-8 h-8 text-white" />
@@ -136,7 +136,7 @@ const CommunicationModule = () => {
         </div>
 
         {/* Recording Controls */}
-        <div className="bg-slate-900/50 p-6 rounded-xl space-y-4">
+        <div className="bg-card/50 p-6 rounded-xl space-y-4">
           <div className="flex items-center justify-center gap-4">
             {!isRecording ? (
               <Button
@@ -168,7 +168,7 @@ const CommunicationModule = () => {
               </div>
               <div className="flex items-center justify-center gap-2 mt-2">
                 <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                <span className="text-sm text-slate-400">Recording...</span>
+                <span className="text-sm text-muted-foreground">Recording...</span>
               </div>
             </div>
           )}
@@ -182,10 +182,10 @@ const CommunicationModule = () => {
             onChange={(e) => setAnswer(e.target.value)}
             placeholder="Type or speak your answer here..."
             rows={6}
-            className="bg-slate-900/50 border-slate-800 focus:border-indigo-500 resize-none"
+            className="bg-card/50 border-border focus:border-indigo-500 resize-none"
             data-testid="answer-textarea"
           />
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-muted-foreground">
             {answer.split(' ').filter(w => w).length} words
           </p>
         </div>
@@ -213,7 +213,7 @@ const CommunicationModule = () => {
           </h3>
 
           {/* Confidence Score */}
-          <div className="bg-slate-900/50 p-6 rounded-xl">
+          <div className="bg-card/50 p-6 rounded-xl">
             <div className="flex items-center justify-between mb-3">
               <span className="font-semibold">Confidence Score</span>
               <span className="text-2xl font-bold gradient-text">
@@ -225,16 +225,16 @@ const CommunicationModule = () => {
 
           {/* Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-slate-900/50 p-4 rounded-lg">
-              <div className="text-sm text-slate-400 mb-1">Word Count</div>
+            <div className="bg-card/50 p-4 rounded-lg">
+              <div className="text-sm text-muted-foreground mb-1">Word Count</div>
               <div className="text-2xl font-bold">{analysis.word_count}</div>
             </div>
-            <div className="bg-slate-900/50 p-4 rounded-lg">
-              <div className="text-sm text-slate-400 mb-1">Filler Words</div>
+            <div className="bg-card/50 p-4 rounded-lg">
+              <div className="text-sm text-muted-foreground mb-1">Filler Words</div>
               <div className="text-2xl font-bold text-orange-400">{analysis.filler_count}</div>
             </div>
-            <div className="bg-slate-900/50 p-4 rounded-lg">
-              <div className="text-sm text-slate-400 mb-1">Avg Sentence Length</div>
+            <div className="bg-card/50 p-4 rounded-lg">
+              <div className="text-sm text-muted-foreground mb-1">Avg Sentence Length</div>
               <div className="text-2xl font-bold">{analysis.avg_sentence_length}</div>
             </div>
           </div>
@@ -246,7 +246,7 @@ const CommunicationModule = () => {
               {analysis.feedback.map((fb, idx) => (
                 <div key={idx} className="flex items-start gap-3 bg-indigo-500/10 p-4 rounded-lg border border-indigo-500/30">
                   <span className="text-indigo-400 mt-0.5">💡</span>
-                  <span className="text-slate-300">{fb}</span>
+                  <span className="text-foreground">{fb}</span>
                 </div>
               ))}
             </div>

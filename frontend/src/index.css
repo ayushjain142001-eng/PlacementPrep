@@ -26,6 +26,13 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 239 84% 67%;
     --radius: 0.75rem;
+    
+    /* Custom theme variables for gradients and backgrounds */
+    --bg-primary: 222.2 84% 4.9%;
+    --bg-secondary: 217.2 32.6% 17.5%;
+    --bg-tertiary: 217.2 32.6% 12%;
+    --glass-bg: 255 255 255 / 0.05;
+    --glass-border: 255 255 255 / 0.1;
   }
 
   .light {
@@ -48,6 +55,13 @@
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 239 84% 67%;
+    
+    /* Custom theme variables for light mode */
+    --bg-primary: 0 0% 98%;
+    --bg-secondary: 210 40% 96.1%;
+    --bg-tertiary: 214.3 31.8% 91.4%;
+    --glass-bg: 255 255 255 / 0.6;
+    --glass-border: 214.3 31.8% 91.4%;
   }
 }
 
@@ -98,7 +112,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-slate-900/50;
+  background: hsl(var(--bg-secondary) / 0.5);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -109,6 +123,10 @@
   @apply bg-indigo-500;
 }
 
+.light ::-webkit-scrollbar-track {
+  background: hsl(var(--bg-secondary));
+}
+
 /* Gradient text */
 .gradient-text {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400;
@@ -116,7 +134,22 @@
 
 /* Glassmorphism */
 .glass {
-  @apply bg-white/5 backdrop-blur-md border border-white/10;
+  background: hsl(var(--glass-bg));
+  border: 1px solid hsl(var(--glass-border));
+  backdrop-filter: blur(12px);
+}
+
+/* Background utilities */
+.bg-app-primary {
+  background: hsl(var(--bg-primary));
+}
+
+.bg-app-secondary {
+  background: hsl(var(--bg-secondary));
+}
+
+.bg-app-tertiary {
+  background: hsl(var(--bg-tertiary));
 }
 
 /* Hide number input arrows */

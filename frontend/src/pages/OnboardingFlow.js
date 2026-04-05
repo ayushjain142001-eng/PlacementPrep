@@ -53,11 +53,11 @@ const OnboardingFlow = () => {
           <div className="flex items-center justify-between mb-2">
             {[1, 2, 3, 4].map((s) => (
               <div key={s} className={`w-1/4 h-2 mx-1 rounded-full transition-all ${
-                s <= step ? 'bg-indigo-500' : 'bg-slate-800'
+                s <= step ? 'bg-indigo-500' : 'bg-secondary'
               }`} />
             ))}
           </div>
-          <p className="text-center text-slate-400">Step {step} of 4</p>
+          <p className="text-center text-muted-foreground">Step {step} of 4</p>
         </div>
 
         <AnimatePresence mode="wait">
@@ -71,18 +71,18 @@ const OnboardingFlow = () => {
             {step === 1 && (
               <div className="space-y-6" data-testid="onboarding-step-1">
                 <h2 className="text-3xl font-bold">Career Goals</h2>
-                <p className="text-slate-400">Tell us about your target role and companies</p>
+                <p className="text-muted-foreground">Tell us about your target role and companies</p>
                 <Input
                   placeholder="Target Role (e.g., Software Engineer)"
                   value={formData.targetRole}
                   onChange={(e) => setFormData({...formData, targetRole: e.target.value})}
-                  className="bg-slate-900/50 border-slate-800"
+                  className="bg-card/50 border-border"
                 />
                 <Input
                   placeholder="Target Companies (comma separated)"
                   value={formData.targetCompanies}
                   onChange={(e) => setFormData({...formData, targetCompanies: e.target.value})}
-                  className="bg-slate-900/50 border-slate-800"
+                  className="bg-card/50 border-border"
                 />
               </div>
             )}
@@ -90,12 +90,12 @@ const OnboardingFlow = () => {
             {step === 2 && (
               <div className="space-y-6" data-testid="onboarding-step-2">
                 <h2 className="text-3xl font-bold">Tech Stack</h2>
-                <p className="text-slate-400">What technologies do you want to focus on?</p>
+                <p className="text-muted-foreground">What technologies do you want to focus on?</p>
                 <Input
                   placeholder="Technologies (e.g., React, Python, Java)"
                   value={formData.techStack}
                   onChange={(e) => setFormData({...formData, techStack: e.target.value})}
-                  className="bg-slate-900/50 border-slate-800"
+                  className="bg-card/50 border-border"
                 />
               </div>
             )}
@@ -103,10 +103,10 @@ const OnboardingFlow = () => {
             {step === 3 && (
               <div className="space-y-6" data-testid="onboarding-step-3">
                 <h2 className="text-3xl font-bold">Availability</h2>
-                <p className="text-slate-400">How much time can you dedicate daily?</p>
+                <p className="text-muted-foreground">How much time can you dedicate daily?</p>
                 <div className="space-y-4">
                   <label className="block">
-                    <span className="text-slate-300">Daily Hours: {formData.dailyHours}</span>
+                    <span className="text-foreground">Daily Hours: {formData.dailyHours}</span>
                     <input
                       type="range"
                       min="1"
@@ -119,7 +119,7 @@ const OnboardingFlow = () => {
                   <select
                     value={formData.timeline}
                     onChange={(e) => setFormData({...formData, timeline: e.target.value})}
-                    className="w-full p-3 bg-slate-900/50 border border-slate-800 rounded-lg text-white"
+                    className="w-full p-3 bg-card/50 border border-border rounded-lg text-white"
                   >
                     <option value="1-3 months">1-3 months</option>
                     <option value="3-6 months">3-6 months</option>
@@ -135,7 +135,7 @@ const OnboardingFlow = () => {
                   <Check className="w-10 h-10 text-white" />
                 </div>
                 <h2 className="text-3xl font-bold">All Set!</h2>
-                <p className="text-slate-400">
+                <p className="text-muted-foreground">
                   We've created a personalized roadmap for you. Let's start your journey!
                 </p>
               </div>

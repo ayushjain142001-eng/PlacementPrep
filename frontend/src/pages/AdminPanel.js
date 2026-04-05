@@ -39,7 +39,7 @@ const AdminPanel = () => {
     <div className="space-y-8" data-testid="admin-panel">
       <div>
         <h1 className="text-4xl font-bold mb-2">Admin Panel</h1>
-        <p className="text-slate-400">Manage users, content, and analytics</p>
+        <p className="text-muted-foreground">Manage users, content, and analytics</p>
       </div>
 
       {/* Navigation */}
@@ -51,7 +51,7 @@ const AdminPanel = () => {
             className={`px-6 py-3 rounded-xl capitalize transition-all ${
               view === tab
                 ? 'bg-indigo-500 text-white'
-                : 'glass border border-slate-800 hover:border-slate-700'
+                : 'glass border border-border hover:border-slate-700'
             }`}
           >
             {tab}
@@ -69,7 +69,7 @@ const AdminPanel = () => {
               className="glass p-6 rounded-2xl"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-slate-400">Total Users</span>
+                <span className="text-sm text-muted-foreground">Total Users</span>
                 <Users className="w-5 h-5 text-indigo-500" />
               </div>
               <div className="text-4xl font-bold">{stats?.total_users || 0}</div>
@@ -82,7 +82,7 @@ const AdminPanel = () => {
               className="glass p-6 rounded-2xl"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-slate-400">Total Attempts</span>
+                <span className="text-sm text-muted-foreground">Total Attempts</span>
                 <FileQuestion className="w-5 h-5 text-purple-500" />
               </div>
               <div className="text-4xl font-bold">{stats?.total_attempts || 0}</div>
@@ -95,7 +95,7 @@ const AdminPanel = () => {
               className="glass p-6 rounded-2xl"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-slate-400">Interviews</span>
+                <span className="text-sm text-muted-foreground">Interviews</span>
                 <BarChart3 className="w-5 h-5 text-green-500" />
               </div>
               <div className="text-4xl font-bold">{stats?.total_interviews || 0}</div>
@@ -122,7 +122,7 @@ const AdminPanel = () => {
       {view === 'users' && (
         <div className="glass p-8 rounded-2xl">
           <h3 className="text-2xl font-bold mb-6">User Management</h3>
-          <p className="text-slate-400">User management features coming soon...</p>
+          <p className="text-muted-foreground">User management features coming soon...</p>
         </div>
       )}
 
@@ -130,7 +130,7 @@ const AdminPanel = () => {
       {view === 'questions' && (
         <div className="glass p-8 rounded-2xl">
           <h3 className="text-2xl font-bold mb-6">Question Management</h3>
-          <p className="text-slate-400">Question CRUD interface coming soon...</p>
+          <p className="text-muted-foreground">Question CRUD interface coming soon...</p>
         </div>
       )}
 
@@ -138,7 +138,7 @@ const AdminPanel = () => {
       {view === 'analytics' && (
         <div className="glass p-8 rounded-2xl">
           <h3 className="text-2xl font-bold mb-6">Platform Analytics</h3>
-          <p className="text-slate-400">Detailed analytics dashboard coming soon...</p>
+          <p className="text-muted-foreground">Detailed analytics dashboard coming soon...</p>
         </div>
       )}
     </div>

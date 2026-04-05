@@ -85,7 +85,7 @@ const StudyGroupsPage = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-4xl font-bold mb-2">Study Groups</h1>
-          <p className="text-slate-400">Learn together, grow together</p>
+          <p className="text-muted-foreground">Learn together, grow together</p>
         </div>
         <Button onClick={() => setShowCreateForm(!showCreateForm)} className="btn-glow">
           <Plus className="w-5 h-5 mr-2" />
@@ -105,20 +105,20 @@ const StudyGroupsPage = () => {
             placeholder="Group name"
             value={newGroup.name}
             onChange={(e) => setNewGroup({ ...newGroup, name: e.target.value })}
-            className="bg-slate-900/50 border-slate-800"
+            className="bg-card/50 border-border"
           />
           <Textarea
             placeholder="Description"
             value={newGroup.description}
             onChange={(e) => setNewGroup({ ...newGroup, description: e.target.value })}
-            className="bg-slate-900/50 border-slate-800"
+            className="bg-card/50 border-border"
             rows={3}
           />
           <Input
             placeholder="Focus areas (comma separated)"
             value={newGroup.focus}
             onChange={(e) => setNewGroup({ ...newGroup, focus: e.target.value })}
-            className="bg-slate-900/50 border-slate-800"
+            className="bg-card/50 border-border"
           />
           <div className="flex gap-3">
             <Button onClick={handleCreateGroup} className="btn-glow">Create Group</Button>
@@ -142,7 +142,7 @@ const StudyGroupsPage = () => {
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <h3 className="text-xl font-bold mb-2">{group.name}</h3>
-                  <p className="text-slate-400 text-sm mb-3">{group.description}</p>
+                  <p className="text-muted-foreground text-sm mb-3">{group.description}</p>
                   <div className="flex items-center gap-2 text-sm text-slate-500 mb-3">
                     <Crown className="w-4 h-4 text-yellow-500" />
                     <span>Created by {group.owner}</span>
@@ -156,8 +156,8 @@ const StudyGroupsPage = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center justify-between pt-4 border-t border-slate-800">
-                <div className="flex items-center gap-2 text-sm text-slate-400">
+              <div className="flex items-center justify-between pt-4 border-t border-border">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Users className="w-4 h-4" />
                   <span>{group.members} members</span>
                 </div>
@@ -189,7 +189,7 @@ const StudyGroupsPage = () => {
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <h3 className="text-xl font-bold mb-2">{group.name}</h3>
-                  <p className="text-slate-400 text-sm mb-3">{group.description}</p>
+                  <p className="text-muted-foreground text-sm mb-3">{group.description}</p>
                   <div className="flex items-center gap-2 text-sm text-slate-500 mb-3">
                     <Crown className="w-4 h-4 text-yellow-500" />
                     <span>Created by {group.owner}</span>
@@ -203,8 +203,8 @@ const StudyGroupsPage = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center justify-between pt-4 border-t border-slate-800">
-                <div className="flex items-center gap-2 text-sm text-slate-400">
+              <div className="flex items-center justify-between pt-4 border-t border-border">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Users className="w-4 h-4" />
                   <span>{group.members} members</span>
                 </div>
@@ -224,9 +224,9 @@ const StudyGroupsPage = () => {
 
       {groups.length === 0 && (
         <div className="glass p-12 rounded-2xl text-center">
-          <Users className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+          <Users className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
           <h3 className="text-2xl font-bold mb-2">No study groups yet</h3>
-          <p className="text-slate-400 mb-6">Create or join a group to start learning together</p>
+          <p className="text-muted-foreground mb-6">Create or join a group to start learning together</p>
           <Button onClick={() => setShowCreateForm(true)} className="btn-glow">
             <Plus className="w-5 h-5 mr-2" />
             Create Your First Group

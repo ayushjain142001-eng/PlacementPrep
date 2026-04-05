@@ -209,11 +209,12 @@ async def update_profile(profile_data: dict, current_user: dict = Depends(get_cu
 @api_router.get("/questions/{question_type}")
 async def get_questions(
     question_type: str,
+    category: Optional[str] = None,
     difficulty: Optional[str] = None,
     count: int = 10,
     current_user: dict = Depends(get_current_user)
 ):
-    questions = QuestionBank.get_questions_by_type(question_type, count, difficulty)
+    questions = QuestionBank.get_questions_by_type(question_type, count, difficulty, category)
     return questions
 
 @api_router.post("/questions", response_model=Question)
@@ -391,8 +392,9 @@ async def start_interview(session_data: InterviewSessionCreate, current_user: di
     
     session_dict = session.model_dump()
     session_dict['started_at'] = session_dict['started_at'].isoformat()
-    await db.interviews.insert_one(session_dict)
+    await db.interviews.insert_one(session_dict.copy())
     
+    # Return without _id
     return session_dict
 
 @api_router.post("/interviews/{session_id}/respond")

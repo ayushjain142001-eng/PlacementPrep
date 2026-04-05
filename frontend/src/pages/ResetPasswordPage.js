@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useTheme } from '../contexts/ThemeContext';
 import api from '../utils/api';
 import { toast } from 'sonner';
 import { Zap, Lock, CheckCircle } from 'lucide-react';
@@ -11,6 +12,7 @@ import { validatePassword } from '../utils/validation';
 const ResetPasswordPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const token = searchParams.get('token');
   
   const [password, setPassword] = useState('');
@@ -52,7 +54,7 @@ const ResetPasswordPage = () => {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4 transition-colors duration-300">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -62,17 +64,17 @@ const ResetPasswordPage = () => {
             <CheckCircle className="w-10 h-10 text-green-500" />
           </div>
           <h2 className="text-3xl font-bold">Password Reset Successful</h2>
-          <p className="text-slate-300">Redirecting to login...</p>
+          <p className="text-foreground">Redirecting to login...</p>
         </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 transition-colors duration-300">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 -left-4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob" />
-        <div className="absolute top-0 -right-4 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000" />
+        <div className={`absolute top-0 -left-4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl ${theme === 'dark' ? 'opacity-10' : 'opacity-5'} animate-blob`} />
+        <div className={`absolute top-0 -right-4 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl ${theme === 'dark' ? 'opacity-10' : 'opacity-5'} animate-blob animation-delay-2000`} />
       </div>
 
       <motion.div
@@ -86,19 +88,19 @@ const ResetPasswordPage = () => {
           </div>
           <div>
             <h1 className="text-2xl font-bold gradient-text font-heading">PlacementPrep</h1>
-            <p className="text-xs text-slate-400">Your Ultimate Placement Preparation Platform</p>
+            <p className="text-xs text-muted-foreground">Your Ultimate Placement Preparation Platform</p>
           </div>
         </div>
 
-        <div className="glass p-8 rounded-2xl border border-slate-800/50">
+        <div className="glass p-8 rounded-2xl border border-border/50">
           <h2 className="text-3xl font-bold font-heading mb-2">Reset Password</h2>
-          <p className="text-slate-400 mb-6">Enter your new password</p>
+          <p className="text-muted-foreground mb-6">Enter your new password</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">New Password</label>
+              <label className="block text-sm font-medium text-foreground mb-2">New Password</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   type="password"
                   value={password}
@@ -107,7 +109,7 @@ const ResetPasswordPage = () => {
                     setErrors({ ...errors, password: null });
                   }}
                   placeholder="••••••••"
-                  className={`pl-10 bg-slate-900/50 border-slate-800 focus:border-indigo-500 rounded-lg ${
+                  className={`pl-10 bg-card/50 border-border focus:border-indigo-500 rounded-lg ${
                     errors.password ? 'border-red-500' : ''
                   }`}
                 />
@@ -118,9 +120,9 @@ const ResetPasswordPage = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Confirm Password</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Confirm Password</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   type="password"
                   value={confirmPassword}
@@ -129,7 +131,7 @@ const ResetPasswordPage = () => {
                     setErrors({ ...errors, confirmPassword: null });
                   }}
                   placeholder="••••••••"
-                  className={`pl-10 bg-slate-900/50 border-slate-800 focus:border-indigo-500 rounded-lg ${
+                  className={`pl-10 bg-card/50 border-border focus:border-indigo-500 rounded-lg ${
                     errors.confirmPassword ? 'border-red-500' : ''
                   }`}
                 />

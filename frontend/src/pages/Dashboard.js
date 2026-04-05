@@ -105,7 +105,7 @@ const Dashboard = () => {
           <h1 className="text-3xl md:text-4xl font-bold font-heading mb-2">
             Welcome back, <span className="gradient-text">{profile?.name}!</span>
           </h1>
-          <p className="text-slate-400">Let's continue building your career</p>
+          <p className="text-muted-foreground">Let's continue building your career</p>
         </div>
         <div className="flex items-center gap-4">
           <div className="glass px-6 py-3 rounded-full flex items-center gap-3">
@@ -125,7 +125,7 @@ const Dashboard = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="lg:col-span-8 lg:row-span-2 glass p-8 rounded-2xl border border-slate-800/50 relative overflow-hidden"
+          className="lg:col-span-8 lg:row-span-2 glass p-8 rounded-2xl border border-border/50 relative overflow-hidden"
           data-testid="hire-readiness-card"
         >
           <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500 rounded-full filter blur-3xl opacity-10" />
@@ -133,7 +133,7 @@ const Dashboard = () => {
             <div className="flex items-start justify-between mb-6">
               <div>
                 <h2 className="text-2xl font-bold mb-2">Hire Readiness Score</h2>
-                <p className="text-slate-400">Your overall preparation level</p>
+                <p className="text-muted-foreground">Your overall preparation level</p>
               </div>
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center">
                 <Target className="w-8 h-8 text-white" />
@@ -143,7 +143,7 @@ const Dashboard = () => {
             <div className="mb-6">
               <div className="flex items-end gap-2 mb-2">
                 <span className="text-6xl font-bold gradient-text">{Math.round(hireReadiness)}</span>
-                <span className="text-2xl text-slate-400 mb-2">/100</span>
+                <span className="text-2xl text-muted-foreground mb-2">/100</span>
               </div>
               <Progress value={hireReadiness} className="h-3" />
             </div>
@@ -177,7 +177,7 @@ const Dashboard = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="lg:col-span-4 glass p-6 rounded-2xl border border-slate-800/50"
+          className="lg:col-span-4 glass p-6 rounded-2xl border border-border/50"
           data-testid="streak-card"
         >
           <div className="flex items-center justify-between mb-4">
@@ -185,7 +185,7 @@ const Dashboard = () => {
             <Flame className="w-6 h-6 text-orange-500 streak-flame" />
           </div>
           <div className="text-4xl font-bold mb-2">{profile?.streak_days || 0} days</div>
-          <p className="text-sm text-slate-400">Keep practicing daily!</p>
+          <p className="text-sm text-muted-foreground">Keep practicing daily!</p>
         </motion.div>
 
         {/* Quick Stats */}
@@ -193,7 +193,7 @@ const Dashboard = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="lg:col-span-4 glass p-6 rounded-2xl border border-slate-800/50"
+          className="lg:col-span-4 glass p-6 rounded-2xl border border-border/50"
           data-testid="attempts-card"
         >
           <div className="flex items-center justify-between mb-4">
@@ -201,7 +201,7 @@ const Dashboard = () => {
             <CheckCircle className="w-6 h-6 text-green-500" />
           </div>
           <div className="text-4xl font-bold mb-2">{dashboardData?.analytics?.total_attempts || 0}</div>
-          <p className="text-sm text-slate-400">Questions solved</p>
+          <p className="text-sm text-muted-foreground">Questions solved</p>
         </motion.div>
 
         {/* Skill Distribution */}
@@ -209,7 +209,7 @@ const Dashboard = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="lg:col-span-8 glass p-6 rounded-2xl border border-slate-800/50"
+          className="lg:col-span-8 glass p-6 rounded-2xl border border-border/50"
           data-testid="skill-distribution-card"
         >
           <h3 className="font-semibold mb-6">Skill Distribution</h3>
@@ -245,12 +245,12 @@ const Dashboard = () => {
                 transition={{ delay: idx * 0.05 }}
               >
                 <Link to={module.path} data-testid={`module-${module.name.toLowerCase()}`}>
-                  <div className="glass p-6 rounded-2xl border border-slate-800/50 hover:border-indigo-500/50 transition-all hover-lift group">
+                  <div className="glass p-6 rounded-2xl border border-border/50 hover:border-indigo-500/50 transition-all hover-lift group">
                     <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${module.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                       <Icon className="w-7 h-7 text-white" />
                     </div>
                     <h3 className="text-xl font-semibold mb-2">{module.name}</h3>
-                    <p className="text-slate-400 text-sm mb-4">Continue practicing</p>
+                    <p className="text-muted-foreground text-sm mb-4">Continue practicing</p>
                     <div className="flex items-center text-indigo-400 text-sm font-medium">
                       Start <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                     </div>
@@ -273,7 +273,7 @@ const Dashboard = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.1 }}
-                className="glass p-6 rounded-xl border border-slate-800/50 flex items-start gap-4"
+                className="glass p-6 rounded-xl border border-border/50 flex items-start gap-4"
               >
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                   rec.priority === 'high' ? 'bg-red-500/20 text-red-400' :
@@ -284,7 +284,7 @@ const Dashboard = () => {
                 </div>
                 <div className="flex-1">
                   <h4 className="font-semibold mb-1">{rec.title}</h4>
-                  <p className="text-sm text-slate-400">{rec.description}</p>
+                  <p className="text-sm text-muted-foreground">{rec.description}</p>
                 </div>
               </motion.div>
             ))}

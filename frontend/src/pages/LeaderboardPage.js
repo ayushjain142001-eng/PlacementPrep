@@ -27,7 +27,7 @@ const LeaderboardPage = () => {
 
   const getRankIcon = (rank) => {
     if (rank === 1) return <Crown className="w-6 h-6 text-yellow-500" />;
-    if (rank === 2) return <Medal className="w-6 h-6 text-slate-300" />;
+    if (rank === 2) return <Medal className="w-6 h-6 text-foreground" />;
     if (rank === 3) return <Medal className="w-6 h-6 text-orange-600" />;
     return null;
   };
@@ -46,7 +46,7 @@ const LeaderboardPage = () => {
     <div className="max-w-6xl mx-auto space-y-8" data-testid="leaderboard-page">
       <div className="text-center">
         <h1 className="text-5xl font-bold mb-4">🏆 Leaderboard</h1>
-        <p className="text-slate-400 text-lg">Top performers this month</p>
+        <p className="text-muted-foreground text-lg">Top performers this month</p>
       </div>
 
       {/* User's Rank */}
@@ -61,7 +61,7 @@ const LeaderboardPage = () => {
               <div className="text-3xl font-bold gradient-text">#{userRank}</div>
               <div>
                 <div className="font-semibold">Your Rank</div>
-                <div className="text-sm text-slate-400">{profile?.xp || 0} XP</div>
+                <div className="text-sm text-muted-foreground">{profile?.xp || 0} XP</div>
               </div>
             </div>
             <Trophy className="w-8 h-8 text-indigo-500" />
@@ -95,7 +95,7 @@ const LeaderboardPage = () => {
               </div>
               
               <h3 className="text-xl font-bold mb-1">{entry.name || 'Anonymous'}</h3>
-              <div className="flex items-center justify-center gap-2 text-slate-400 mb-3">
+              <div className="flex items-center justify-center gap-2 text-muted-foreground mb-3">
                 <Zap className="w-4 h-4 text-yellow-500" />
                 <span className="font-semibold">{entry.xp} XP</span>
               </div>
@@ -107,7 +107,7 @@ const LeaderboardPage = () => {
 
       {/* Rest of Leaderboard */}
       <div className="glass rounded-2xl overflow-hidden">
-        <div className="bg-slate-900/50 p-6 border-b border-slate-800">
+        <div className="bg-card/50 p-6 border-b border-border">
           <h3 className="text-2xl font-bold">All Rankings</h3>
         </div>
         
@@ -122,13 +122,13 @@ const LeaderboardPage = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.02 }}
-                className={`p-6 hover:bg-slate-800/30 transition-colors ${
+                className={`p-6 hover:bg-secondary/30 transition-colors ${
                   isUser ? 'bg-indigo-500/10' : ''
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-8 text-center font-bold text-slate-400">
+                    <div className="w-8 text-center font-bold text-muted-foreground">
                       #{rank}
                     </div>
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white flex items-center justify-center font-bold">
@@ -136,7 +136,7 @@ const LeaderboardPage = () => {
                     </div>
                     <div>
                       <div className="font-semibold">{entry.name || 'Anonymous'}</div>
-                      <div className="text-sm text-slate-400">Level {entry.level}</div>
+                      <div className="text-sm text-muted-foreground">Level {entry.level}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">

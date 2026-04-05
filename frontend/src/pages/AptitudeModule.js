@@ -57,9 +57,9 @@ const AptitudeModule = () => {
   const fetchQuestions = async (category, testMode) => {
     setLoading(true);
     try {
-      const response = await api.get(`/questions/aptitude?count=${testMode === 'test' ? 20 : 10}`);
-      const filtered = response.data.filter(q => q.category === category);
-      setQuestions(filtered.length > 0 ? filtered : response.data);
+      const count = testMode === 'test' ? 20 : 10;
+      const response = await api.get(`/questions/aptitude?category=${category}&count=${count}`);
+      setQuestions(response.data);
     } catch (error) {
       toast.error('Failed to load questions');
     } finally {
@@ -140,7 +140,7 @@ const AptitudeModule = () => {
       <div className="space-y-8" data-testid="aptitude-categories">
         <div>
           <h1 className="text-4xl font-bold mb-2">Aptitude Training</h1>
-          <p className="text-slate-400">Choose a category to start practicing</p>
+          <p className="text-muted-foreground">Choose a category to start practicing</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -158,7 +158,7 @@ const AptitudeModule = () => {
                 {category.icon}
               </div>
               <h3 className="text-2xl font-bold mb-2">{category.name}</h3>
-              <p className="text-slate-400 mb-4">{category.description}</p>
+              <p className="text-muted-foreground mb-4">{category.description}</p>
               <Button className="w-full btn-glow">
                 Start Training
               </Button>
@@ -175,7 +175,7 @@ const AptitudeModule = () => {
       <div className="max-w-4xl mx-auto space-y-6" data-testid="mode-select">
         <button
           onClick={() => setView('categories')}
-          className="flex items-center text-slate-400 hover:text-white transition-colors mb-4"
+          className="flex items-center text-muted-foreground hover:text-white transition-colors mb-4"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
           Back to categories
@@ -186,7 +186,7 @@ const AptitudeModule = () => {
             {selectedCategory.icon}
           </div>
           <h1 className="text-4xl font-bold mb-2">{selectedCategory.name}</h1>
-          <p className="text-slate-400">{selectedCategory.description}</p>
+          <p className="text-muted-foreground">{selectedCategory.description}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -199,7 +199,7 @@ const AptitudeModule = () => {
           >
             <Target className="w-16 h-16 text-indigo-400 mx-auto mb-4" />
             <h3 className="text-2xl font-bold mb-2">Practice Mode</h3>
-            <p className="text-slate-400 mb-4">10 questions • Learn at your pace • Instant feedback</p>
+            <p className="text-muted-foreground mb-4">10 questions • Learn at your pace • Instant feedback</p>
             <Button className="btn-glow">
               <Play className="w-5 h-5 mr-2" />
               Start Practice
@@ -215,7 +215,7 @@ const AptitudeModule = () => {
           >
             <BarChart3 className="w-16 h-16 text-purple-400 mx-auto mb-4" />
             <h3 className="text-2xl font-bold mb-2">Test Mode</h3>
-            <p className="text-slate-400 mb-4">20 questions • Timed • Performance tracking</p>
+            <p className="text-muted-foreground mb-4">20 questions • Timed • Performance tracking</p>
             <Button className="btn-glow">
               <Play className="w-5 h-5 mr-2" />
               Start Test
@@ -253,17 +253,17 @@ const AptitudeModule = () => {
           <div className="text-7xl font-bold gradient-text">{Math.round(avgScore)}%</div>
           
           <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
-            <div className="bg-slate-900/50 p-4 rounded-xl">
+            <div className="bg-card/50 p-4 rounded-xl">
               <div className="text-2xl font-bold">{correctCount}</div>
-              <div className="text-sm text-slate-400">Correct</div>
+              <div className="text-sm text-muted-foreground">Correct</div>
             </div>
-            <div className="bg-slate-900/50 p-4 rounded-xl">
+            <div className="bg-card/50 p-4 rounded-xl">
               <div className="text-2xl font-bold">{results.length - correctCount}</div>
-              <div className="text-sm text-slate-400">Wrong</div>
+              <div className="text-sm text-muted-foreground">Wrong</div>
             </div>
-            <div className="bg-slate-900/50 p-4 rounded-xl">
+            <div className="bg-card/50 p-4 rounded-xl">
               <div className="text-2xl font-bold">{results.length}</div>
-              <div className="text-sm text-slate-400">Total</div>
+              <div className="text-sm text-muted-foreground">Total</div>
             </div>
           </div>
 
@@ -298,15 +298,15 @@ const AptitudeModule = () => {
           <div className="flex items-center gap-3 mb-2">
             <button
               onClick={resetModule}
-              className="text-slate-400 hover:text-white transition-colors"
+              className="text-muted-foreground hover:text-white transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
-            <span className="text-slate-400">
+            <span className="text-muted-foreground">
               {selectedCategory.name} • {mode === 'practice' ? 'Practice' : 'Test'} Mode
             </span>
           </div>
-          <p className="text-slate-400">Question {currentQuestion + 1} of {questions.length}</p>
+          <p className="text-muted-foreground">Question {currentQuestion + 1} of {questions.length}</p>
           <Progress value={(currentQuestion / questions.length) * 100} className="mt-2" />
         </div>
         <div className="flex items-center gap-2 glass px-4 py-2 rounded-full">
@@ -334,7 +334,7 @@ const AptitudeModule = () => {
           </div>
 
           <h2 className="text-2xl font-bold">{question?.title}</h2>
-          <p className="text-slate-300 text-lg">{question?.description}</p>
+          <p className="text-foreground text-lg">{question?.description}</p>
 
           <div className="space-y-3">
             {question?.options?.map((option, idx) => (
@@ -345,7 +345,7 @@ const AptitudeModule = () => {
                 className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                   selectedAnswer === option
                     ? 'border-indigo-500 bg-indigo-500/10'
-                    : 'border-slate-800 hover:border-slate-700'
+                    : 'border-border hover:border-slate-700'
                 }`}
               >
                 <span className="font-semibold mr-3">{String.fromCharCode(65 + idx)}.</span>

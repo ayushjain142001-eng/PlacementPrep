@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useTheme } from '../contexts/ThemeContext';
 import { toast } from 'sonner';
 import { Zap, Mail, ArrowLeft, CheckCircle } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { validateEmail } from '../utils/validation';
+import api from '../utils/api';
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const { theme } = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,7 +40,7 @@ const ForgotPasswordPage = () => {
 
   if (sent) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4 transition-colors duration-300">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -47,10 +50,10 @@ const ForgotPasswordPage = () => {
             <CheckCircle className="w-10 h-10 text-green-500" />
           </div>
           <h2 className="text-3xl font-bold">Check Your Email</h2>
-          <p className="text-slate-300">
+          <p className="text-foreground">
             We've sent a password reset link to <span className="text-indigo-400 font-semibold">{email}</span>
           </p>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-muted-foreground">
             Didn't receive the email? Check your spam folder or try again.
           </p>
           <Link to="/login">
@@ -65,10 +68,10 @@ const ForgotPasswordPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 transition-colors duration-300">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 -left-4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob" />
-        <div className="absolute top-0 -right-4 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000" />
+        <div className={`absolute top-0 -left-4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl ${theme === 'dark' ? 'opacity-10' : 'opacity-5'} animate-blob`} />
+        <div className={`absolute top-0 -right-4 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl ${theme === 'dark' ? 'opacity-10' : 'opacity-5'} animate-blob animation-delay-2000`} />
       </div>
 
       <motion.div
@@ -82,24 +85,24 @@ const ForgotPasswordPage = () => {
           </div>
           <div>
             <h1 className="text-2xl font-bold gradient-text font-heading">PlacementPrep</h1>
-            <p className="text-xs text-slate-400">Your Ultimate Placement Preparation Platform</p>
+            <p className="text-xs text-muted-foreground">Your Ultimate Placement Preparation Platform</p>
           </div>
         </Link>
 
-        <div className="glass p-8 rounded-2xl border border-slate-800/50">
-          <Link to="/login" className="inline-flex items-center text-sm text-slate-400 hover:text-slate-300 mb-6">
+        <div className="glass p-8 rounded-2xl border border-border/50">
+          <Link to="/login" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to login
           </Link>
           
           <h2 className="text-3xl font-bold font-heading mb-2">Forgot Password?</h2>
-          <p className="text-slate-400 mb-6">No worries! Enter your email and we'll send you reset instructions.</p>
+          <p className="text-muted-foreground mb-6">No worries! Enter your email and we'll send you reset instructions.</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Email Address</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   type="email"
                   value={email}
@@ -108,7 +111,7 @@ const ForgotPasswordPage = () => {
                     setError('');
                   }}
                   placeholder="you@example.com"
-                  className={`pl-10 bg-slate-900/50 border-slate-800 focus:border-indigo-500 rounded-lg ${
+                  className={`pl-10 bg-card/50 border-border focus:border-indigo-500 rounded-lg ${
                     error ? 'border-red-500' : ''
                   }`}
                 />
