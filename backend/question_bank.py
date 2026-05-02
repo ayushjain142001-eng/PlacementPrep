@@ -18,6 +18,10 @@ class QuestionBank:
         {"category": "quantitative", "title": "Average", "description": "The average of 5 numbers is 20. If one number is excluded, the average becomes 15. What is the excluded number?", "difficulty": "medium", "options": ["25", "30", "35", "40"], "correct_answer": "40", "points": 15, "time_limit": 75},
         {"category": "quantitative", "title": "Age Problem", "description": "John is 5 years older than Mary. 10 years ago, John was twice as old as Mary. How old is Mary now?", "difficulty": "hard", "options": ["15", "20", "25", "30"], "correct_answer": "25", "points": 20, "time_limit": 120},
         {"category": "quantitative", "title": "Mixture Problem", "description": "In what ratio should water be mixed with milk costing $50/liter to get a mixture worth $40/liter?", "difficulty": "hard", "options": ["1:4", "1:5", "2:3", "1:3"], "correct_answer": "1:4", "points": 20, "time_limit": 120},
+        {"category": "quantitative", "title": "Boats and Streams", "description": "A boat travels 30 km upstream in 5 hours and 30 km downstream in 3 hours. What is the speed of the stream?", "difficulty": "hard", "options": ["1 km/h", "2 km/h", "3 km/h", "4 km/h"], "correct_answer": "2 km/h", "points": 20, "time_limit": 150},
+        {"category": "quantitative", "title": "Pipes and Cisterns", "description": "Pipe A fills a tank in 6 hours; Pipe B empties it in 9 hours. If both are opened together, in how many hours is the tank filled?", "difficulty": "hard", "options": ["12 hours", "15 hours", "18 hours", "20 hours"], "correct_answer": "18 hours", "points": 20, "time_limit": 150},
+        {"category": "quantitative", "title": "Number System", "description": "If x + 1/x = 5, what is the value of x² + 1/x²?", "difficulty": "hard", "options": ["21", "23", "25", "27"], "correct_answer": "23", "points": 20, "time_limit": 120},
+        {"category": "quantitative", "title": "Alligation", "description": "In what ratio must rice at $9/kg be mixed with rice at $7/kg so that the mixture is $8/kg?", "difficulty": "hard", "options": ["1:1", "1:2", "2:1", "2:3"], "correct_answer": "1:1", "points": 20, "time_limit": 120},
         {"category": "quantitative", "title": "Area Calculation", "description": "A rectangular field is 20m long and 15m wide. What is its area?", "difficulty": "easy", "options": ["200 sq m", "250 sq m", "300 sq m", "350 sq m"], "correct_answer": "300 sq m", "points": 10, "time_limit": 45},
         {"category": "quantitative", "title": "Discount", "description": "A shirt marked at $500 is sold at a discount of 20%. What is the selling price?", "difficulty": "easy", "options": ["$300", "$350", "$400", "$450"], "correct_answer": "$400", "points": 10, "time_limit": 60},
         {"category": "quantitative", "title": "Time Calculation", "description": "If a clock shows 3:15, what is the angle between hour and minute hands?", "difficulty": "medium", "options": ["0°", "7.5°", "15°", "22.5°"], "correct_answer": "7.5°", "points": 15, "time_limit": 90},
@@ -40,11 +44,21 @@ class QuestionBank:
         {"category": "logical", "title": "Number Analogy", "description": "25:625 :: 15:?", "difficulty": "medium", "options": ["125", "225", "325", "425"], "correct_answer": "225", "points": 15, "time_limit": 75},
         {"category": "logical", "title": "Letter Series", "description": "What comes next: ACE, BDF, CEG, ?", "difficulty": "medium", "options": ["DFH", "DGI", "EGI", "EFH"], "correct_answer": "DFH", "points": 15, "time_limit": 75},
         {"category": "logical", "title": "Venn Diagram", "description": "In a group of 50 people, 30 like tea, 25 like coffee, and 10 like both. How many like neither?", "difficulty": "hard", "options": ["5", "10", "15", "20"], "correct_answer": "5", "points": 20, "time_limit": 120},
+        {"category": "logical", "title": "Cube Puzzle", "description": "A cube of side 4 cm is painted and cut into 1 cm cubes. How many small cubes have exactly 2 faces painted?", "difficulty": "hard", "options": ["12", "16", "24", "32"], "correct_answer": "24", "points": 20, "time_limit": 120},
+        {"category": "logical", "title": "Complex Coding", "description": "If MONKEY is coded as XDMJOL, then TIGER is coded as?", "difficulty": "hard", "options": ["QDFHS", "UJHFS", "QHFDS", "SDFHQ"], "correct_answer": "QDFHS", "points": 20, "time_limit": 150},
+        {"category": "logical", "title": "Circular Arrangement", "description": "8 people sit around a circular table. If A sits opposite B, and C sits 3 seats to A's right, how many seats are between C and B?", "difficulty": "hard", "options": ["1", "2", "3", "4"], "correct_answer": "1", "points": 20, "time_limit": 150},
+        {"category": "logical", "title": "Advanced Syllogism", "description": "All cats are mammals. No mammals are birds. Some birds fly. Which conclusion must be true?", "difficulty": "hard", "options": ["No cats are birds", "Some cats fly", "All birds are cats", "Some mammals fly"], "correct_answer": "No cats are birds", "points": 20, "time_limit": 120},
+        {"category": "logical", "title": "Clock Problem", "description": "At what time between 4 and 5 o'clock will the hands of a clock be at right angles?", "difficulty": "hard", "options": ["4:05 5/11", "4:38 2/11", "Both A & B", "None"], "correct_answer": "Both A & B", "points": 20, "time_limit": 150},
         
         # Verbal - 15 questions
         {"category": "verbal", "title": "Synonym 1", "description": "Choose the word most similar to 'Happy'", "difficulty": "easy", "options": ["Joyful", "Sad", "Angry", "Tired"], "correct_answer": "Joyful", "points": 10, "time_limit": 45},
         {"category": "verbal", "title": "Antonym 1", "description": "Choose the opposite of 'Hot'", "difficulty": "easy", "options": ["Warm", "Cool", "Cold", "Freezing"], "correct_answer": "Cold", "points": 10, "time_limit": 45},
         {"category": "verbal", "title": "Synonym 2", "description": "Choose the word most similar to 'Ephemeral'", "difficulty": "hard", "options": ["Permanent", "Transient", "Eternal", "Solid"], "correct_answer": "Transient", "points": 20, "time_limit": 60},
+        {"category": "verbal", "title": "Synonym 3", "description": "Choose the word most similar to 'Ubiquitous'", "difficulty": "hard", "options": ["Rare", "Omnipresent", "Hidden", "Unique"], "correct_answer": "Omnipresent", "points": 20, "time_limit": 60},
+        {"category": "verbal", "title": "Antonym 3", "description": "Choose the opposite of 'Meticulous'", "difficulty": "hard", "options": ["Careful", "Careless", "Detailed", "Precise"], "correct_answer": "Careless", "points": 20, "time_limit": 60},
+        {"category": "verbal", "title": "Advanced Idiom", "description": "What does 'Hobson's choice' mean?", "difficulty": "hard", "options": ["A difficult decision", "No real choice at all", "Best option", "Random selection"], "correct_answer": "No real choice at all", "points": 20, "time_limit": 75},
+        {"category": "verbal", "title": "One Word Sub 2", "description": "Fear of closed spaces:", "difficulty": "hard", "options": ["Agoraphobia", "Claustrophobia", "Acrophobia", "Xenophobia"], "correct_answer": "Claustrophobia", "points": 20, "time_limit": 60},
+        {"category": "verbal", "title": "Phrasal Verb", "description": "What does 'call off' mean?", "difficulty": "hard", "options": ["To announce loudly", "To cancel", "To postpone", "To remember"], "correct_answer": "To cancel", "points": 20, "time_limit": 60},
         {"category": "verbal", "title": "Antonym 2", "description": "Choose the opposite of 'Abundant'", "difficulty": "medium", "options": ["Plentiful", "Scarce", "Rich", "Full"], "correct_answer": "Scarce", "points": 15, "time_limit": 60},
         {"category": "verbal", "title": "Sentence Correction 1", "description": "Choose the correct sentence", "difficulty": "medium", "options": ["He don't like apples", "He doesn't like apples", "He doesn't likes apples", "He not like apples"], "correct_answer": "He doesn't like apples", "points": 15, "time_limit": 60},
         {"category": "verbal", "title": "Sentence Correction 2", "description": "Identify the error: 'Neither of the students have completed their homework'", "difficulty": "medium", "options": ["Neither", "have", "their", "No error"], "correct_answer": "have", "points": 15, "time_limit": 75},
@@ -69,6 +83,11 @@ class QuestionBank:
         {"category": "pattern", "title": "Pattern 4", "description": "What comes next: Z, Y, X, W, ?", "difficulty": "easy", "options": ["U", "V", "T", "S"], "correct_answer": "V", "points": 10, "time_limit": 60},
         {"category": "pattern", "title": "Pattern 5", "description": "Complete: 1, 1, 2, 3, 5, 8, ?", "difficulty": "medium", "options": ["11", "12", "13", "14"], "correct_answer": "13", "points": 15, "time_limit": 75},
         {"category": "pattern", "title": "Pattern 6", "description": "What comes next: 100, 81, 64, 49, ?", "difficulty": "medium", "options": ["30", "32", "36", "40"], "correct_answer": "36", "points": 15, "time_limit": 75},
+        {"category": "pattern", "title": "Pattern 7", "description": "What comes next: 2, 6, 12, 20, 30, ?", "difficulty": "medium", "options": ["40", "42", "45", "48"], "correct_answer": "42", "points": 15, "time_limit": 75},
+        {"category": "pattern", "title": "Pattern 8", "description": "Complete the pattern: 3, 8, 18, 38, 78, ?", "difficulty": "hard", "options": ["138", "148", "158", "168"], "correct_answer": "158", "points": 20, "time_limit": 120},
+        {"category": "pattern", "title": "Pattern 9", "description": "What comes next: 7, 15, 31, 63, ?", "difficulty": "hard", "options": ["95", "111", "127", "143"], "correct_answer": "127", "points": 20, "time_limit": 120},
+        {"category": "pattern", "title": "Pattern 10", "description": "What comes next: 1, 8, 27, 64, 125, ?", "difficulty": "hard", "options": ["180", "196", "216", "243"], "correct_answer": "216", "points": 20, "time_limit": 120},
+        {"category": "pattern", "title": "Pattern 11", "description": "Next in series: AZ, BY, CX, DW, ?", "difficulty": "hard", "options": ["EV", "EU", "FV", "EW"], "correct_answer": "EV", "points": 20, "time_limit": 120},
         
         {"category": "analytical", "title": "Logic Puzzle 1", "description": "If all Bloops are Razzies and all Razzies are Lazzies, then all Bloops are definitely Lazzies. True or False?", "difficulty": "medium", "options": ["True", "False"], "correct_answer": "True", "points": 15, "time_limit": 90},
         {"category": "analytical", "title": "Seating Arrangement", "description": "Five people A, B, C, D, E sit in a row. A and B sit together, C sits at one end. Where does D sit?", "difficulty": "medium", "options": ["Next to C", "Between A and B", "At other end", "Cannot determine"], "correct_answer": "Cannot determine", "points": 15, "time_limit": 120},
@@ -78,6 +97,10 @@ class QuestionBank:
         {"category": "analytical", "title": "Deduction", "description": "All students passed. John is a student. Therefore:", "difficulty": "easy", "options": ["John passed", "John failed", "Cannot say", "John is smart"], "correct_answer": "John passed", "points": 10, "time_limit": 60},
         {"category": "analytical", "title": "Logic 4", "description": "If today is Monday, what day will it be after 100 days?", "difficulty": "medium", "options": ["Monday", "Tuesday", "Wednesday", "Thursday"], "correct_answer": "Tuesday", "points": 15, "time_limit": 90},
         {"category": "analytical", "title": "Puzzle 2", "description": "In a family of 6, there are 2 parents and 4 children. If all children are boys, how many females?", "difficulty": "easy", "options": ["0", "1", "2", "3"], "correct_answer": "1", "points": 10, "time_limit": 60},
+        {"category": "analytical", "title": "Complex Seating", "description": "A, B, C, D sit in a row. A is not at either end. C is to the right of A. B is to the left of A. Where is D?", "difficulty": "hard", "options": ["Left end", "Right end", "Between A and C", "Cannot determine"], "correct_answer": "Right end", "points": 20, "time_limit": 150},
+        {"category": "analytical", "title": "Logic Deduction Hard", "description": "If 'All A are B' and 'Some B are C', which of the following must be true?", "difficulty": "hard", "options": ["Some A are C", "All A are C", "No A are C", "Cannot be determined"], "correct_answer": "Cannot be determined", "points": 20, "time_limit": 120},
+        {"category": "analytical", "title": "Family Tree", "description": "P is the father of Q. Q is the sister of R. R is the son of S. How is S related to P?", "difficulty": "hard", "options": ["Wife", "Daughter", "Son", "Mother"], "correct_answer": "Wife", "points": 20, "time_limit": 120},
+        {"category": "analytical", "title": "Complex Rank", "description": "In a class of 60, Raj ranks 15th from top and Amit is 10 ranks below Raj. What is Amit's rank from bottom?", "difficulty": "hard", "options": ["35", "36", "37", "38"], "correct_answer": "36", "points": 20, "time_limit": 120},
         
         {"category": "visual", "title": "Mirror Image", "description": "Which is the mirror image of 'SMART'?", "difficulty": "medium", "options": ["TRAMS", "TRAMS", "SMART", "TRAMS"], "correct_answer": "TRAMS", "points": 15, "time_limit": 75},
         {"category": "visual", "title": "Cube Counting", "description": "A cube is painted red on all faces and cut into 27 smaller cubes. How many have 2 red faces?", "difficulty": "hard", "options": ["8", "12", "6", "0"], "correct_answer": "12", "points": 20, "time_limit": 120},
@@ -171,38 +194,38 @@ class QuestionBank:
     
     @staticmethod
     def get_questions_by_type(question_type: str, count: int = 10, difficulty: str = None, category: str = None) -> List[Dict[str, Any]]:
-        """Get random non-repeating questions by type and category"""
+        """Get random non-repeating questions by type, category, and difficulty.
+
+        Returns unique questions only. If the filtered pool has fewer questions
+        than requested, returns all available unique questions (no duplicates).
+        """
         questions_map = {
             "aptitude": QuestionBank.APTITUDE_QUESTIONS,
             "reasoning": QuestionBank.REASONING_QUESTIONS,
             "coding": QuestionBank.CODING_QUESTIONS,
             "communication": QuestionBank.COMMUNICATION_QUESTIONS
         }
-        
+
         all_questions = questions_map.get(question_type, [])
-        
-        # Filter by category if specified (for aptitude/reasoning)
+
+        # Filter by category if specified
         if category:
             filtered = [q for q in all_questions if q.get('category') == category]
-            # If category has questions, use them; otherwise fall back to all
             if filtered:
                 all_questions = filtered
-        
+
         # Filter by difficulty if specified
         if difficulty:
             difficulty_filtered = [q for q in all_questions if q.get('difficulty') == difficulty]
             if difficulty_filtered:
                 all_questions = difficulty_filtered
-        
-        # If we don't have enough questions, repeat the pool
-        if len(all_questions) < count:
-            # Create a larger pool by duplicating questions
-            multiplier = (count // len(all_questions)) + 1
-            all_questions = all_questions * multiplier
-        
-        # Shuffle and return requested count
-        shuffled = random.sample(all_questions, min(count, len(all_questions)))
-        return shuffled
+
+        if not all_questions:
+            return []
+
+        # Return up to `count` unique questions, shuffled
+        sample_size = min(count, len(all_questions))
+        return random.sample(all_questions, sample_size)
     
     @staticmethod
     def get_interview_questions(interview_type: str, count: int = 5) -> List[str]:

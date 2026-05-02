@@ -32,8 +32,8 @@
     --bg-primary: 222.2 84% 4.9%;
     --bg-secondary: 217.2 32.6% 17.5%;
     --bg-tertiary: 217.2 32.6% 12%;
-    --glass-bg: 255 255 255 / 0.05;
-    --glass-border: 255 255 255 / 0.1;
+    --glass-bg: 0 0% 100% / 0.05;
+    --glass-border: 0 0% 100% / 0.1;
     
     /* Semantic colors - Dark Mode */
     --color-success: 160 84% 39%;
@@ -70,7 +70,7 @@
     --bg-primary: 0 0% 98%;
     --bg-secondary: 220 14.3% 95.9%;
     --bg-tertiary: 220 13% 91%;
-    --glass-bg: 255 255 255 / 0.9;
+    --glass-bg: 0 0% 100% / 0.9;
     --glass-border: 220 13% 91%;
     
     /* Semantic colors - Light Mode */
