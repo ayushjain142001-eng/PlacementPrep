@@ -128,25 +128,25 @@ const ProfilePage = () => {
 
           {/* Stats */}
           <div className="space-y-4">
-            <div className="bg-card/50 p-4 rounded-xl">
+            <div className="bg-card/50 p-4 rounded-xl border border-border">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-muted-foreground">Level</span>
-                <Trophy className="w-5 h-5 text-yellow-500" />
+                <Trophy className="w-5 h-5 text-amber-500" />
               </div>
               <div className="text-3xl font-bold">{profile?.level || 1}</div>
             </div>
 
-            <div className="bg-card/50 p-4 rounded-xl">
+            <div className="bg-card/50 p-4 rounded-xl border border-border">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-muted-foreground">Total XP</span>
-                <Zap className="w-5 h-5 text-yellow-500" />
+                <Zap className="w-5 h-5 text-indigo-500" />
               </div>
               <div className="text-3xl font-bold">{profile?.xp || 0}</div>
               <Progress value={levelProgress} className="mt-2" />
               <p className="text-xs text-muted-foreground mt-1">{100 - levelProgress} XP to next level</p>
             </div>
 
-            <div className="bg-card/50 p-4 rounded-xl">
+            <div className="bg-card/50 p-4 rounded-xl border border-border">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-muted-foreground">Streak</span>
                 <span className="text-2xl">🔥</span>
@@ -154,10 +154,10 @@ const ProfilePage = () => {
               <div className="text-3xl font-bold">{profile?.streak_days || 0} days</div>
             </div>
 
-            <div className="bg-card/50 p-4 rounded-xl">
+            <div className="bg-card/50 p-4 rounded-xl border border-border">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-muted-foreground">Hire Readiness</span>
-                <Target className="w-5 h-5 text-indigo-500" />
+                <Target className="w-5 h-5 text-emerald-500" />
               </div>
               <div className="text-3xl font-bold">{profile?.hire_readiness_score || 0}%</div>
             </div>

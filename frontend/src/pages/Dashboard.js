@@ -125,11 +125,11 @@ const Dashboard = () => {
         </div>
         <div className="flex items-center gap-4">
           <div className="glass px-6 py-3 rounded-full flex items-center gap-3">
-            <Zap className="w-5 h-5 text-yellow-500" />
+            <Zap className="w-5 h-5 text-amber-500" />
             <span className="font-semibold">{profile?.xp || 0} XP</span>
           </div>
           <div className="glass px-6 py-3 rounded-full flex items-center gap-3">
-            <Trophy className="w-5 h-5 text-yellow-500" />
+            <Trophy className="w-5 h-5 text-amber-500" />
             <span className="font-semibold">Level {profile?.level || 1}</span>
           </div>
         </div>
@@ -293,7 +293,7 @@ const Dashboard = () => {
               >
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                   rec.priority === 'high' ? 'bg-red-500/20 text-red-400' :
-                  rec.priority === 'medium' ? 'bg-yellow-500/20 text-yellow-400' :
+                  rec.priority === 'medium' ? 'bg-amber-500/20 text-amber-500' :
                   'bg-green-500/20 text-green-400'
                 }`}>
                   <Award className="w-5 h-5" />

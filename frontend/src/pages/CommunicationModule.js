@@ -122,7 +122,7 @@ const CommunicationModule = () => {
           <div className="flex-1">
             <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium mb-4 ${
               question.difficulty === 'easy' ? 'bg-green-500/20 text-green-400' :
-              question.difficulty === 'medium' ? 'bg-yellow-500/20 text-yellow-400' :
+              question.difficulty === 'medium' ? 'bg-amber-500/20 text-amber-500' :
               'bg-red-500/20 text-red-400'
             }`}>
               {question.difficulty}
