@@ -117,6 +117,7 @@ const CodingModule = () => {
       setCode(initialCode);
       setEditorKey(prev => prev + 1); // Force editor remount
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQuestion, questions]);
 
   // Handle language change - CRITICAL FIX
@@ -130,6 +131,7 @@ const CodingModule = () => {
       
       toast.info(`Switched to ${language.toUpperCase()}`);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language]);
 
   const fetchQuestions = async () => {
