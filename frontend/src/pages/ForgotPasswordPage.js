@@ -67,8 +67,8 @@ const ForgotPasswordPage = () => {
           
           {/* Development only: Show reset link directly */}
           {devResetLink && (
-            <div className="mt-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
-              <p className="text-sm text-yellow-500 font-semibold mb-2">
+            <div className="mt-6 p-4 bg-violet-500/10 border border-orange-500/30 rounded-lg">
+              <p className="text-sm text-violet-500 font-semibold mb-2">
                 🔧 Development Mode
               </p>
               <p className="text-xs text-foreground mb-3">

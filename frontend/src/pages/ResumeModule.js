@@ -211,13 +211,13 @@ const ResumeModule = () => {
           {/* Improvements */}
           <div className="glass p-8 rounded-2xl">
             <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
-              <AlertCircle className="w-6 h-6 text-yellow-500" />
+              <AlertCircle className="w-6 h-6 text-violet-500" />
               Areas for Improvement
             </h3>
             <div className="space-y-3">
               {analysis.improvements.map((improvement, idx) => (
-                <div key={idx} className="flex items-start gap-3 bg-yellow-500/10 p-4 rounded-lg border border-yellow-500/30">
-                  <span className="text-yellow-400">⚠️</span>
+                <div key={idx} className="flex items-start gap-3 bg-violet-500/10 p-4 rounded-lg border border-orange-500/30">
+                  <span className="text-violet-400">⚠️</span>
                   <span className="text-foreground">{improvement}</span>
                 </div>
               ))}

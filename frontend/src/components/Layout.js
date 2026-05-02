@@ -83,7 +83,7 @@ const Layout = () => {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold truncate text-foreground">{profile?.name || 'User'}</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <Trophy className="w-3 h-3 text-amber-500" />
+                      <Trophy className="w-3 h-3 text-violet-500" />
                       <span className="text-xs text-muted-foreground">Level {profile?.level || 1}</span>
                       <span className="text-xs text-indigo-400">{profile?.xp || 0} XP</span>
                     </div>

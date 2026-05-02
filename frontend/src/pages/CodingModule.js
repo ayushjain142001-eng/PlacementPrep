@@ -126,7 +126,7 @@ const CodingModule = () => {
               <h2 className="text-2xl font-bold">{question.title}</h2>
               <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                 question.difficulty === 'easy' ? 'bg-green-500/20 text-green-400' :
-                question.difficulty === 'medium' ? 'bg-amber-500/20 text-amber-500' :
+                question.difficulty === 'medium' ? 'bg-violet-500/20 text-violet-500' :
                 'bg-red-500/20 text-red-400'
               }`}>
                 {question.difficulty}
@@ -164,7 +164,7 @@ const CodingModule = () => {
               className="glass p-6 rounded-2xl space-y-4"
             >
               <h3 className="font-semibold text-lg flex items-center gap-2">
-                <Trophy className="w-5 h-5 text-yellow-500" />
+                <Trophy className="w-5 h-5 text-violet-500" />
                 Results
               </h3>
               
@@ -188,7 +188,7 @@ const CodingModule = () => {
                   <h4 className="font-medium">Feedback:</h4>
                   {testResults.feedback.map((fb, idx) => (
                     <div key={idx} className="flex items-start gap-2 text-sm text-foreground">
-                      <span className="text-yellow-500">•</span>
+                      <span className="text-violet-500">•</span>
                       {fb}
                     </div>
                   ))}

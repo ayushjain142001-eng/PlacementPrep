@@ -326,7 +326,7 @@ const AptitudeModule = () => {
           <div>
             <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
               question?.difficulty === 'easy' ? 'bg-green-500/20 text-green-400' :
-              question?.difficulty === 'medium' ? 'bg-amber-500/20 text-amber-500' :
+              question?.difficulty === 'medium' ? 'bg-violet-500/20 text-violet-500' :
               'bg-red-500/20 text-red-400'
             }`}>
               {question?.difficulty}

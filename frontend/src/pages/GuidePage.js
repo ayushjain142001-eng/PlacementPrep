@@ -99,7 +99,7 @@ const GuidePage = () => {
       {/* Tips */}
       <div className="glass p-8 rounded-2xl">
         <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
-          <Lightbulb className="w-8 h-8 text-yellow-500" />
+          <Lightbulb className="w-8 h-8 text-violet-500" />
           Pro Tips
         </h2>
         <div className="space-y-3">

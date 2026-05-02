@@ -6,15 +6,15 @@
 
 @layer base {
   :root {
-    /* Dark mode - Default */
+    /* Dark mode - Modern Professional Palette */
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 217.2 32.6% 17.5%;
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 239 84% 67%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 263 70% 60%;
+    --primary-foreground: 210 40% 98%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
@@ -25,45 +25,61 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 239 84% 67%;
+    --ring: 263 70% 60%;
     --radius: 0.75rem;
     
-    /* Custom theme variables for gradients and backgrounds */
+    /* Custom theme variables */
     --bg-primary: 222.2 84% 4.9%;
     --bg-secondary: 217.2 32.6% 17.5%;
     --bg-tertiary: 217.2 32.6% 12%;
     --glass-bg: 255 255 255 / 0.05;
     --glass-border: 255 255 255 / 0.1;
+    
+    /* Semantic colors - Dark Mode */
+    --color-success: 160 84% 39%;
+    --color-warning: 25 95% 53%;
+    --color-info: 199 89% 48%;
+    --color-purple: 263 70% 60%;
+    --color-pink: 330 81% 60%;
+    --color-cyan: 189 94% 43%;
   }
 
   .light {
-    /* Light mode - Professional & Aesthetic */
-    --background: 210 20% 98%;
+    /* Light mode - Clean Professional Design */
+    --background: 0 0% 98%;
     --foreground: 222.2 47.4% 11.2%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 47.4% 11.2%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 47.4% 11.2%;
-    --primary: 239 84% 67%;
+    --primary: 263 70% 50%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 220 14% 96%;
+    --secondary: 220 14.3% 95.9%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 220 14% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 220 14% 96%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+    --accent: 220 14.3% 95.9%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 239 84% 67%;
+    --ring: 263 70% 50%;
     
-    /* Custom theme variables for light mode */
-    --bg-primary: 210 20% 98%;
-    --bg-secondary: 220 14% 96%;
+    /* Custom theme variables */
+    --bg-primary: 0 0% 98%;
+    --bg-secondary: 220 14.3% 95.9%;
     --bg-tertiary: 220 13% 91%;
-    --glass-bg: 255 255 255 / 0.8;
+    --glass-bg: 255 255 255 / 0.9;
     --glass-border: 220 13% 91%;
+    
+    /* Semantic colors - Light Mode */
+    --color-success: 160 84% 39%;
+    --color-warning: 25 95% 53%;
+    --color-info: 199 89% 48%;
+    --color-purple: 263 70% 50%;
+    --color-pink: 330 81% 50%;
+    --color-cyan: 189 94% 43%;
   }
 }
 

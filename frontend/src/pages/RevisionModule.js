@@ -158,9 +158,9 @@ const RevisionModule = () => {
         >
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm text-muted-foreground">Due Today</span>
-            <Target className="w-5 h-5 text-yellow-500" />
+            <Target className="w-5 h-5 text-violet-500" />
           </div>
-          <div className="text-4xl font-bold text-yellow-400">{todayItems.length}</div>
+          <div className="text-4xl font-bold text-violet-400">{todayItems.length}</div>
         </motion.div>
 
         <motion.div
@@ -251,14 +251,14 @@ const RevisionModule = () => {
       {/* Today's Items */}
       {todayItems.length > 0 && (
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-yellow-400">📅 Due Today</h2>
+          <h2 className="text-2xl font-bold text-violet-400">📅 Due Today</h2>
           {todayItems.map((item, idx) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: idx * 0.05 }}
-              className="glass p-6 rounded-2xl border-2 border-yellow-500/30"
+              className="glass p-6 rounded-2xl border-2 border-orange-500/30"
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">

@@ -26,7 +26,7 @@ const LeaderboardPage = () => {
   };
 
   const getRankIcon = (rank) => {
-    if (rank === 1) return <Crown className="w-6 h-6 text-yellow-500" />;
+    if (rank === 1) return <Crown className="w-6 h-6 text-violet-500" />;
     if (rank === 2) return <Medal className="w-6 h-6 text-foreground" />;
     if (rank === 3) return <Medal className="w-6 h-6 text-orange-600" />;
     return null;
@@ -96,7 +96,7 @@ const LeaderboardPage = () => {
               
               <h3 className="text-xl font-bold mb-1">{entry.name || 'Anonymous'}</h3>
               <div className="flex items-center justify-center gap-2 text-muted-foreground mb-3">
-                <Zap className="w-4 h-4 text-yellow-500" />
+                <Zap className="w-4 h-4 text-violet-500" />
                 <span className="font-semibold">{entry.xp} XP</span>
               </div>
               <div className="text-sm text-slate-500">Level {entry.level}</div>
@@ -140,7 +140,7 @@ const LeaderboardPage = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-yellow-500" />
+                    <Zap className="w-5 h-5 text-violet-500" />
                     <span className="font-semibold">{entry.xp} XP</span>
                   </div>
                 </div>

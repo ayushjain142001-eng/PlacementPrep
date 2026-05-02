@@ -122,7 +122,7 @@ const CommunicationModule = () => {
           <div className="flex-1">
             <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium mb-4 ${
               question.difficulty === 'easy' ? 'bg-green-500/20 text-green-400' :
-              question.difficulty === 'medium' ? 'bg-amber-500/20 text-amber-500' :
+              question.difficulty === 'medium' ? 'bg-violet-500/20 text-violet-500' :
               'bg-red-500/20 text-red-400'
             }`}>
               {question.difficulty}
@@ -208,7 +208,7 @@ const CommunicationModule = () => {
           className="glass p-8 rounded-2xl space-y-6"
         >
           <h3 className="text-2xl font-bold flex items-center gap-3">
-            <Trophy className="w-6 h-6 text-yellow-500" />
+            <Trophy className="w-6 h-6 text-violet-500" />
             Communication Analysis
           </h3>
 

@@ -128,15 +128,15 @@ const ProfilePage = () => {
 
           {/* Stats */}
           <div className="space-y-4">
-            <div className="bg-card/50 p-4 rounded-xl border border-border">
+            <div className="bg-gradient-to-br from-violet-500/10 to-purple-500/10 p-4 rounded-xl border border-violet-500/20">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-muted-foreground">Level</span>
-                <Trophy className="w-5 h-5 text-amber-500" />
+                <Trophy className="w-5 h-5 text-violet-500" />
               </div>
               <div className="text-3xl font-bold">{profile?.level || 1}</div>
             </div>
 
-            <div className="bg-card/50 p-4 rounded-xl border border-border">
+            <div className="bg-gradient-to-br from-indigo-500/10 to-blue-500/10 p-4 rounded-xl border border-indigo-500/20">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-muted-foreground">Total XP</span>
                 <Zap className="w-5 h-5 text-indigo-500" />
@@ -146,7 +146,7 @@ const ProfilePage = () => {
               <p className="text-xs text-muted-foreground mt-1">{100 - levelProgress} XP to next level</p>
             </div>
 
-            <div className="bg-card/50 p-4 rounded-xl border border-border">
+            <div className="bg-gradient-to-br from-orange-500/10 to-red-500/10 p-4 rounded-xl border border-orange-500/20">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-muted-foreground">Streak</span>
                 <span className="text-2xl">🔥</span>
@@ -154,7 +154,7 @@ const ProfilePage = () => {
               <div className="text-3xl font-bold">{profile?.streak_days || 0} days</div>
             </div>
 
-            <div className="bg-card/50 p-4 rounded-xl border border-border">
+            <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 p-4 rounded-xl border border-emerald-500/20">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-muted-foreground">Hire Readiness</span>
                 <Target className="w-5 h-5 text-emerald-500" />

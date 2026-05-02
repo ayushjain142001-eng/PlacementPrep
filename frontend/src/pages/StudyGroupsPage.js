@@ -144,7 +144,7 @@ const StudyGroupsPage = () => {
                   <h3 className="text-xl font-bold mb-2">{group.name}</h3>
                   <p className="text-muted-foreground text-sm mb-3">{group.description}</p>
                   <div className="flex items-center gap-2 text-sm text-slate-500 mb-3">
-                    <Crown className="w-4 h-4 text-yellow-500" />
+                    <Crown className="w-4 h-4 text-violet-500" />
                     <span>Created by {group.owner}</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -191,7 +191,7 @@ const StudyGroupsPage = () => {
                   <h3 className="text-xl font-bold mb-2">{group.name}</h3>
                   <p className="text-muted-foreground text-sm mb-3">{group.description}</p>
                   <div className="flex items-center gap-2 text-sm text-slate-500 mb-3">
-                    <Crown className="w-4 h-4 text-yellow-500" />
+                    <Crown className="w-4 h-4 text-violet-500" />
                     <span>Created by {group.owner}</span>
                   </div>
                   <div className="flex flex-wrap gap-2">

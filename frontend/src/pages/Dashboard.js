@@ -107,7 +107,7 @@ const Dashboard = () => {
     { name: 'Communication', path: '/communication', icon: MessageSquare, color: 'from-green-500 to-emerald-500' },
     { name: 'Coding', path: '/coding', icon: Code, color: 'from-orange-500 to-red-500' },
     { name: 'Interview', path: '/interview', icon: Video, color: 'from-indigo-500 to-purple-500' },
-    { name: 'Revision', path: '/revision', icon: Clock, color: 'from-yellow-500 to-orange-500' }
+    { name: 'Revision', path: '/revision', icon: Clock, color: 'from-orange-500 to-red-500' }
   ];
 
   return (
@@ -125,11 +125,11 @@ const Dashboard = () => {
         </div>
         <div className="flex items-center gap-4">
           <div className="glass px-6 py-3 rounded-full flex items-center gap-3">
-            <Zap className="w-5 h-5 text-amber-500" />
+            <Zap className="w-5 h-5 text-violet-500" />
             <span className="font-semibold">{profile?.xp || 0} XP</span>
           </div>
           <div className="glass px-6 py-3 rounded-full flex items-center gap-3">
-            <Trophy className="w-5 h-5 text-amber-500" />
+            <Trophy className="w-5 h-5 text-violet-500" />
             <span className="font-semibold">Level {profile?.level || 1}</span>
           </div>
         </div>
@@ -293,7 +293,7 @@ const Dashboard = () => {
               >
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                   rec.priority === 'high' ? 'bg-red-500/20 text-red-400' :
-                  rec.priority === 'medium' ? 'bg-amber-500/20 text-amber-500' :
+                  rec.priority === 'medium' ? 'bg-violet-500/20 text-violet-500' :
                   'bg-green-500/20 text-green-400'
                 }`}>
                   <Award className="w-5 h-5" />
