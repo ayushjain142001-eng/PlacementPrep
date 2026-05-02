@@ -218,18 +218,21 @@ class TestPasswordReset:
         """Test forgot password with existing email"""
         response = requests.post(
             f"{BASE_URL}/api/auth/forgot-password",
-            params={"email": TEST_EMAIL}
+            json={"email": TEST_EMAIL}
         )
         assert response.status_code == 200
         data = response.json()
         assert "message" in data
+        # Check for dev_reset_link in development mode
+        if "dev_reset_link" in data:
+            print(f"✓ Dev reset link returned: {data['dev_reset_link']}")
         print(f"✓ Forgot password request successful")
     
     def test_forgot_password_nonexistent_email(self):
         """Test forgot password with non-existent email (should not reveal)"""
         response = requests.post(
             f"{BASE_URL}/api/auth/forgot-password",
-            params={"email": "nonexistent@example.com"}
+            json={"email": "nonexistent@example.com"}
         )
         # Should return 200 to not reveal if email exists
         assert response.status_code == 200

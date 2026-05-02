@@ -14,15 +14,23 @@ import {
   Tooltip, ResponsiveContainer
 } from 'recharts';
 import { toast } from 'sonner';
+import ProductTour from '../components/ProductTour';
 
 const Dashboard = () => {
   const { profile, refreshUser } = useAuth();
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showTour, setShowTour] = useState(false);
 
   useEffect(() => {
     fetchDashboardData();
     handleDailyCheckin();
+    
+    // Check if user has seen the tour
+    const hasSeenTour = localStorage.getItem('hasSeenTour');
+    if (!hasSeenTour) {
+      setTimeout(() => setShowTour(true), 1000);
+    }
   }, []);
 
   const fetchDashboardData = async () => {
@@ -46,6 +54,11 @@ const Dashboard = () => {
     } catch (error) {
       // Already checked in
     }
+  };
+
+  const handleTourFinish = () => {
+    setShowTour(false);
+    localStorage.setItem('hasSeenTour', 'true');
   };
 
   if (loading) {
@@ -99,6 +112,9 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-8" data-testid="dashboard-container">
+      {/* Product Tour */}
+      <ProductTour run={showTour} onFinish={handleTourFinish} />
+      
       {/* Welcome Section */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>

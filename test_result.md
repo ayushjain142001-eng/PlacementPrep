@@ -8,51 +8,46 @@
 
 ## Current Testing Status
 
-### Iteration 1 - Initial Testing (Current)
+### Iteration 2 - New Features Testing (Current)
 
 **Features to Test:**
-1. Light/Dark Mode Theme Switching
-   - Toggle between themes on Dashboard, Aptitude, Reasoning, all auth pages
-   - Verify background colors change properly
-   - Verify text remains readable in both modes
+1. File Upload - Profile Picture
+   - Upload image file (JPEG, PNG, WEBP)
+   - Verify file size validation (max 5MB)
+   - Verify image displays on profile page
+   - Verify image persists after refresh
 
-2. Questions Flow (P0 - CRITICAL)
-   - Aptitude Module: Practice Mode (10 questions), Test Mode (20 questions)
-   - Reasoning Module: Practice Mode (10 questions), Test Mode (20 questions)
-   - Verify questions are unique and randomized
-   - Verify no premature ending
-   - Test all three categories: Quantitative, Logical, Verbal (Aptitude) and Pattern, Analytical, Visual (Reasoning)
+2. File Upload - Resume
+   - Upload PDF/DOC file
+   - Verify file size validation (max 10MB)
+   - Verify resume info shows on profile page
+   - Verify download link works
 
-3. Password Reset Flow (P1)
-   - Test forgot password endpoint
-   - Verify reset token generation
-   - Since no SMTP is configured, verify token is logged or shown in response
+3. Interactive Product Tour
+   - Tour starts automatically on first dashboard visit
+   - Tour highlights key navigation elements
+   - Tour can be skipped
+   - Tour doesn't show again after completion
 
-4. Interview Module WebSocket (P1)
-   - Test interview start flow
-   - Verify WebSocket connection establishes
-   - Test basic interview interaction
-
-5. Authentication
-   - Login/Signup flows
-   - Token validation
-   - Protected route access
+4. Previously Fixed Features (Regression Testing)
+   - Light/Dark mode switching
+   - Questions flow (10 for practice, 20 for test)
+   - Password reset with dev link
 
 **Test Credentials:**
 - Email: test@example.com
 - Password: Test@123
 
 ## Incorporate User Feedback
-- User reported: "Questions end at 3-4 instead of 10/20" → FIXED in backend and frontend
-- User reported: "Light/dark mode only changes text, not background" → FIXED with CSS variables
-- User reported: "Password reset email not received" → Need to mock/log token output
+- User requested: "Continue with all tasks" - Implemented file upload, product tour
+- All P0 and P1 issues from Iteration 1 are resolved
 
 ## Known Issues
-- WebSocket connection attempts on port 443 (non-critical)
-- Glass card background has slight greenish tint - needs refinement
+- Glass card greenish tint (cosmetic, LOW priority)
+- WebSocket warning on port 443 (non-blocking)
 
 ## Next Steps
-1. Run comprehensive tests via testing subagent
-2. Fix all HIGH priority issues
-3. Fix MEDIUM priority issues
-4. Implement remaining features (file upload, product tour, onboarding)
+1. Test new file upload functionality
+2. Test product tour on first login
+3. Regression test previous fixes
+4. Smart onboarding enhancement

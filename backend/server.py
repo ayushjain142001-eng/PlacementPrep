@@ -1,5 +1,6 @@
 from fastapi import FastAPI, APIRouter, Depends, HTTPException, status, UploadFile, File
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -10,6 +11,7 @@ from pathlib import Path
 from typing import List, Optional
 from datetime import datetime, timedelta, timezone
 import uuid
+import shutil
 
 from models import *
 from auth import *
@@ -19,6 +21,15 @@ from pydantic import EmailStr
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
+
+# Upload directories
+UPLOAD_DIR = ROOT_DIR / 'uploads'
+PROFILE_PICS_DIR = UPLOAD_DIR / 'profiles'
+RESUMES_DIR = UPLOAD_DIR / 'resumes'
+
+# Create upload directories if they don't exist
+PROFILE_PICS_DIR.mkdir(parents=True, exist_ok=True)
+RESUMES_DIR.mkdir(parents=True, exist_ok=True)
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
@@ -112,7 +123,11 @@ async def get_current_user_info(current_user: dict = Depends(get_current_user)):
     return {"user": user, "profile": profile}
 
 @api_router.post("/auth/forgot-password")
-async def forgot_password(email: EmailStr):
+async def forgot_password(data: dict):
+    email = data.get("email")
+    if not email:
+        raise HTTPException(status_code=400, detail="Email is required")
+    
     user = await db.users.find_one({"email": email}, {"_id": 0})
     if not user:
         # Don't reveal if user exists or not
@@ -694,6 +709,93 @@ async def mark_notification_read(notification_id: str, current_user: dict = Depe
         {"$set": {"is_read": True}}
     )
     return {"message": "Notification marked as read"}
+
+# ============ FILE UPLOAD ROUTES ============
+
+@api_router.post("/upload/profile-picture")
+async def upload_profile_picture(
+    file: UploadFile = File(...),
+    current_user: dict = Depends(get_current_user)
+):
+    # Validate file type
+    allowed_types = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp']
+    if file.content_type not in allowed_types:
+        raise HTTPException(status_code=400, detail="Only image files (JPEG, PNG, WEBP) are allowed")
+    
+    # Validate file size (max 5MB)
+    file_content = await file.read()
+    if len(file_content) > 5 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="File size must be less than 5MB")
+    
+    # Generate unique filename
+    file_extension = file.filename.split('.')[-1]
+    unique_filename = f"{current_user['user_id']}_{uuid.uuid4()}.{file_extension}"
+    file_path = PROFILE_PICS_DIR / unique_filename
+    
+    # Save file
+    with open(file_path, 'wb') as f:
+        f.write(file_content)
+    
+    # Update user profile
+    profile_pic_url = f"/api/uploads/profiles/{unique_filename}"
+    await db.profiles.update_one(
+        {"user_id": current_user['user_id']},
+        {"$set": {"profile_picture": profile_pic_url}},
+        upsert=True
+    )
+    
+    return {"message": "Profile picture uploaded successfully", "url": profile_pic_url}
+
+@api_router.post("/upload/resume")
+async def upload_resume(
+    file: UploadFile = File(...),
+    current_user: dict = Depends(get_current_user)
+):
+    # Validate file type
+    allowed_types = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+    if file.content_type not in allowed_types:
+        raise HTTPException(status_code=400, detail="Only PDF and DOC files are allowed")
+    
+    # Validate file size (max 10MB)
+    file_content = await file.read()
+    if len(file_content) > 10 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="File size must be less than 10MB")
+    
+    # Generate unique filename
+    file_extension = file.filename.split('.')[-1]
+    unique_filename = f"{current_user['user_id']}_resume_{uuid.uuid4()}.{file_extension}"
+    file_path = RESUMES_DIR / unique_filename
+    
+    # Save file
+    with open(file_path, 'wb') as f:
+        f.write(file_content)
+    
+    # Update user profile
+    resume_url = f"/api/uploads/resumes/{unique_filename}"
+    await db.profiles.update_one(
+        {"user_id": current_user['user_id']},
+        {"$set": {
+            "resume_url": resume_url,
+            "resume_filename": file.filename,
+            "resume_uploaded_at": datetime.now(timezone.utc).isoformat()
+        }},
+        upsert=True
+    )
+    
+    return {"message": "Resume uploaded successfully", "url": resume_url, "filename": file.filename}
+
+@api_router.get("/uploads/{folder}/{filename}")
+async def get_uploaded_file(folder: str, filename: str):
+    # Validate folder
+    if folder not in ['profiles', 'resumes']:
+        raise HTTPException(status_code=400, detail="Invalid folder")
+    
+    file_path = UPLOAD_DIR / folder / filename
+    
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    return FileResponse(file_path)
 
 # Include the router in the main app
 app.include_router(api_router)
