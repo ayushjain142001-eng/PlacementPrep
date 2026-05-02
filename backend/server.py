@@ -234,6 +234,19 @@ async def get_questions(
     count: int = 10,
     current_user: dict = Depends(get_current_user)
 ):
+    """
+    Get questions filtered by type, category, and difficulty
+    
+    Args:
+        question_type: aptitude, reasoning, coding, communication
+        category: optional category filter
+        difficulty: easy, medium, hard (optional)
+        count: number of questions
+    """
+    # Validate difficulty if provided
+    if difficulty and difficulty not in ['easy', 'medium', 'hard']:
+        raise HTTPException(status_code=400, detail="Difficulty must be 'easy', 'medium', or 'hard'")
+    
     questions = QuestionBank.get_questions_by_type(question_type, count, difficulty, category)
     return questions
 

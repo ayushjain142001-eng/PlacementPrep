@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../utils/api';
 import { toast } from 'sonner';
-import { Brain, Clock, CheckCircle, XCircle, Play, BarChart3, Target, ArrowLeft } from 'lucide-react';
+import { Brain, Clock, CheckCircle, XCircle, Play, BarChart3, Target, ArrowLeft, TrendingUp } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Progress } from '../components/ui/progress';
 
@@ -30,9 +30,37 @@ const categories = [
   }
 ];
 
+const difficulties = [
+  {
+    id: 'easy',
+    name: 'Easy',
+    description: 'Foundation building • Perfect for beginners',
+    icon: '🌱',
+    color: 'from-emerald-500 to-green-500',
+    borderColor: 'emerald-500'
+  },
+  {
+    id: 'medium',
+    name: 'Medium',
+    description: 'Moderate challenge • Intermediate level',
+    icon: '⚡',
+    color: 'from-violet-500 to-purple-500',
+    borderColor: 'violet-500'
+  },
+  {
+    id: 'hard',
+    name: 'Hard',
+    description: 'Expert level • Competitive difficulty',
+    icon: '🔥',
+    color: 'from-red-500 to-orange-500',
+    borderColor: 'red-500'
+  }
+];
+
 const AptitudeModule = () => {
-  const [view, setView] = useState('categories'); // categories, mode-select, practice, test, results
+  const [view, setView] = useState('categories'); // categories, difficulty-select, mode-select, practice, test, results
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedDifficulty, setSelectedDifficulty] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -54,14 +82,25 @@ const AptitudeModule = () => {
     return () => clearInterval(interval);
   }, [isActive, timeLeft]);
 
-  const fetchQuestions = async (category, testMode) => {
+  const fetchQuestions = async (category, testMode, difficulty) => {
     setLoading(true);
     try {
       const count = testMode === 'test' ? 20 : 10;
-      const response = await api.get(`/questions/aptitude?category=${category}&count=${count}`);
-      setQuestions(response.data);
+      const response = await api.get(
+        `/questions/aptitude?category=${category}&difficulty=${difficulty}&count=${count}`
+      );
+      
+      if (response.data && response.data.length > 0) {
+        setQuestions(response.data);
+        toast.success(`Loaded ${response.data.length} ${difficulty} questions`);
+      } else {
+        toast.error('No questions available for this combination');
+        setView('difficulty-select');
+      }
     } catch (error) {
+      console.error('Failed to load questions:', error);
       toast.error('Failed to load questions');
+      setView('difficulty-select');
     } finally {
       setLoading(false);
     }
@@ -69,6 +108,11 @@ const AptitudeModule = () => {
 
   const startPractice = (category) => {
     setSelectedCategory(category);
+    setView('difficulty-select');
+  };
+
+  const selectDifficulty = (difficulty) => {
+    setSelectedDifficulty(difficulty);
     setView('mode-select');
   };
 
@@ -77,7 +121,7 @@ const AptitudeModule = () => {
     setCurrentQuestion(0);
     setResults([]);
     setSelectedAnswer(null);
-    await fetchQuestions(selectedCategory.id, selectedMode);
+    await fetchQuestions(selectedCategory.id, selectedMode, selectedDifficulty.id);
     setView(selectedMode === 'practice' ? 'practice' : 'test');
     setIsActive(true);
     setTimeLeft(60);
@@ -113,7 +157,6 @@ const AptitudeModule = () => {
       }
     } catch (error) {
       toast.error('Failed to submit answer');
-      // Move to next question anyway
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(currentQuestion + 1);
         setSelectedAnswer(null);
@@ -128,6 +171,7 @@ const AptitudeModule = () => {
   const resetModule = () => {
     setView('categories');
     setSelectedCategory(null);
+    setSelectedDifficulty(null);
     setQuestions([]);
     setCurrentQuestion(0);
     setResults([]);
@@ -169,13 +213,13 @@ const AptitudeModule = () => {
     );
   }
 
-  // Mode Selection View
-  if (view === 'mode-select') {
+  // Difficulty Selection View - NEW!
+  if (view === 'difficulty-select') {
     return (
-      <div className="max-w-4xl mx-auto space-y-6" data-testid="mode-select">
+      <div className="max-w-5xl mx-auto space-y-6" data-testid="difficulty-select">
         <button
           onClick={() => setView('categories')}
-          className="flex items-center text-muted-foreground hover:text-white transition-colors mb-4"
+          className="flex items-center text-muted-foreground hover:text-foreground transition-colors mb-4"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
           Back to categories
@@ -186,7 +230,69 @@ const AptitudeModule = () => {
             {selectedCategory.icon}
           </div>
           <h1 className="text-4xl font-bold mb-2">{selectedCategory.name}</h1>
-          <p className="text-muted-foreground">{selectedCategory.description}</p>
+          <p className="text-muted-foreground mb-1">{selectedCategory.description}</p>
+          <p className="text-sm text-indigo-400 flex items-center justify-center gap-2 mt-2">
+            <TrendingUp className="w-4 h-4" />
+            Choose your difficulty level
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {difficulties.map((difficulty, idx) => (
+            <motion.div
+              key={difficulty.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.1 }}
+              onClick={() => selectDifficulty(difficulty)}
+              className={`glass p-8 rounded-2xl cursor-pointer border-2 border-transparent hover:border-${difficulty.borderColor}/50 transition-all hover-lift text-center group`}
+              data-testid={`difficulty-${difficulty.id}`}
+            >
+              <div className={`w-20 h-20 bg-gradient-to-br ${difficulty.color} rounded-full flex items-center justify-center text-5xl mx-auto mb-4 group-hover:scale-110 transition-transform`}>
+                {difficulty.icon}
+              </div>
+              <h3 className="text-3xl font-bold mb-2">{difficulty.name}</h3>
+              <p className="text-muted-foreground text-sm">{difficulty.description}</p>
+              <div className="mt-6">
+                <Button className="w-full btn-glow">
+                  Select {difficulty.name}
+                </Button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Mode Selection View
+  if (view === 'mode-select') {
+    return (
+      <div className="max-w-4xl mx-auto space-y-6" data-testid="mode-select">
+        <button
+          onClick={() => setView('difficulty-select')}
+          className="flex items-center text-muted-foreground hover:text-foreground transition-colors mb-4"
+        >
+          <ArrowLeft className="w-5 h-5 mr-2" />
+          Back to difficulty
+        </button>
+
+        <div className="text-center mb-8">
+          <div className={`w-20 h-20 bg-gradient-to-br ${selectedCategory.color} rounded-2xl flex items-center justify-center text-5xl mx-auto mb-4`}>
+            {selectedCategory.icon}
+          </div>
+          <h1 className="text-4xl font-bold mb-2">{selectedCategory.name}</h1>
+          <div className="flex items-center justify-center gap-3 text-muted-foreground">
+            <span>{selectedCategory.description}</span>
+            <span>•</span>
+            <span className={`font-semibold capitalize ${
+              selectedDifficulty.id === 'easy' ? 'text-emerald-400' :
+              selectedDifficulty.id === 'medium' ? 'text-violet-400' :
+              'text-red-400'
+            }`}>
+              {selectedDifficulty.icon} {selectedDifficulty.name}
+            </span>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -250,18 +356,24 @@ const AptitudeModule = () => {
           
           <h1 className="text-4xl font-bold">{mode === 'practice' ? 'Practice' : 'Test'} Completed!</h1>
           
+          <div className="flex items-center justify-center gap-2 text-muted-foreground">
+            <span className="capitalize">{selectedDifficulty.name}</span>
+            <span>•</span>
+            <span>{selectedCategory.name}</span>
+          </div>
+          
           <div className="text-7xl font-bold gradient-text">{Math.round(avgScore)}%</div>
           
           <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
-            <div className="bg-card/50 p-4 rounded-xl">
+            <div className="bg-card/50 p-4 rounded-xl border border-border">
               <div className="text-2xl font-bold">{correctCount}</div>
               <div className="text-sm text-muted-foreground">Correct</div>
             </div>
-            <div className="bg-card/50 p-4 rounded-xl">
+            <div className="bg-card/50 p-4 rounded-xl border border-border">
               <div className="text-2xl font-bold">{results.length - correctCount}</div>
               <div className="text-sm text-muted-foreground">Wrong</div>
             </div>
-            <div className="bg-card/50 p-4 rounded-xl">
+            <div className="bg-card/50 p-4 rounded-xl border border-border">
               <div className="text-2xl font-bold">{results.length}</div>
               <div className="text-sm text-muted-foreground">Total</div>
             </div>
@@ -270,6 +382,9 @@ const AptitudeModule = () => {
           <div className="flex gap-4 justify-center">
             <Button onClick={resetModule} variant="outline" data-testid="back-categories-btn">
               Back to Categories
+            </Button>
+            <Button onClick={() => setView('difficulty-select')} variant="outline">
+              Try Different Difficulty
             </Button>
             <Button onClick={() => startMode(mode)} className="btn-glow" data-testid="retry-btn">
               Try Again
@@ -283,8 +398,21 @@ const AptitudeModule = () => {
   // Question View (Practice/Test)
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-96">
+      <div className="flex flex-col items-center justify-center h-96 space-y-4">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+        <p className="text-muted-foreground">Loading {selectedDifficulty?.name} questions...</p>
+      </div>
+    );
+  }
+
+  if (questions.length === 0 && !loading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-96 space-y-4">
+        <XCircle className="w-16 h-16 text-red-500" />
+        <p className="text-foreground text-xl">No questions available</p>
+        <Button onClick={() => setView('difficulty-select')} variant="outline">
+          Go Back
+        </Button>
       </div>
     );
   }
@@ -298,18 +426,18 @@ const AptitudeModule = () => {
           <div className="flex items-center gap-3 mb-2">
             <button
               onClick={resetModule}
-              className="text-muted-foreground hover:text-white transition-colors"
+              className="text-muted-foreground hover:text-foreground transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
             <span className="text-muted-foreground">
-              {selectedCategory.name} • {mode === 'practice' ? 'Practice' : 'Test'} Mode
+              {selectedCategory.name} • <span className="capitalize">{selectedDifficulty.name}</span> • {mode === 'practice' ? 'Practice' : 'Test'}
             </span>
           </div>
           <p className="text-muted-foreground">Question {currentQuestion + 1} of {questions.length}</p>
           <Progress value={(currentQuestion / questions.length) * 100} className="mt-2" />
         </div>
-        <div className="flex items-center gap-2 glass px-4 py-2 rounded-full">
+        <div className="flex items-center gap-2 glass px-4 py-2 rounded-full border border-border">
           <Clock className="w-5 h-5 text-orange-500" />
           <span className="font-mono font-semibold">{timeLeft}s</span>
         </div>
@@ -321,13 +449,13 @@ const AptitudeModule = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className="glass p-8 rounded-2xl space-y-6"
+          className="glass p-8 rounded-2xl space-y-6 border border-border"
         >
           <div>
             <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
-              question?.difficulty === 'easy' ? 'bg-green-500/20 text-green-400' :
-              question?.difficulty === 'medium' ? 'bg-violet-500/20 text-violet-500' :
-              'bg-red-500/20 text-red-400'
+              question?.difficulty === 'easy' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+              question?.difficulty === 'medium' ? 'bg-violet-500/20 text-violet-400 border border-violet-500/30' :
+              'bg-red-500/20 text-red-400 border border-red-500/30'
             }`}>
               {question?.difficulty}
             </span>
@@ -345,7 +473,7 @@ const AptitudeModule = () => {
                 className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                   selectedAnswer === option
                     ? 'border-indigo-500 bg-indigo-500/10'
-                    : 'border-border hover:border-slate-700'
+                    : 'border-border hover:border-indigo-500/50'
                 }`}
               >
                 <span className="font-semibold mr-3">{String.fromCharCode(65 + idx)}.</span>
