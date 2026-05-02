@@ -324,43 +324,70 @@ async def get_user_attempts(
 
 @api_router.post("/coding/submit")
 async def submit_code(
-    question_id: str,
-    code: str,
-    language: str,
+    data: dict,
     current_user: dict = Depends(get_current_user)
 ):
-    # In real implementation, this would execute code in sandbox
-    # For now, we'll do basic evaluation
+    """
+    Submit code solution for evaluation
     
-    # Mock execution results
-    test_cases = [{"input": {}, "output": True}] * 3
-    execution_results = [True, True, False]  # Mock: 2 out of 3 tests passed
+    Expects:
+        - question_id: str
+        - code: str
+        - language: str
+    """
+    try:
+        question_id = data.get('question_id')
+        code = data.get('code')
+        language = data.get('language')
+        
+        # Validation
+        if not question_id:
+            raise HTTPException(status_code=400, detail="question_id is required")
+        if not code or not code.strip():
+            raise HTTPException(status_code=400, detail="Code cannot be empty")
+        if not language:
+            raise HTTPException(status_code=400, detail="language is required")
+        
+        # Valid languages
+        valid_languages = ['python', 'javascript', 'java', 'cpp']
+        if language not in valid_languages:
+            raise HTTPException(status_code=400, detail=f"Invalid language. Must be one of: {', '.join(valid_languages)}")
+        
+        # Mock execution results (in production, use secure sandbox)
+        test_cases = [{"input": {}, "output": True}] * 3
+        execution_results = [True, True, False]  # Mock: 2 out of 3 tests passed
+        
+        score, analysis = AIEngine.calculate_coding_score(code, test_cases, execution_results)
+        
+        # Save attempt
+        attempt = Attempt(
+            user_id=current_user['user_id'],
+            question_id=question_id,
+            question_type=QuestionType.CODING,
+            answer=code,
+            score=score,
+            time_taken=0,
+            mode=TestMode.PRACTICE,
+            feedback=str(analysis)
+        )
+        
+        attempt_dict = attempt.model_dump()
+        attempt_dict['created_at'] = attempt_dict['created_at'].isoformat()
+        await db.attempts.insert_one(attempt_dict)
+        
+        xp = AIEngine.calculate_xp_reward("question_attempt", score)
+        await db.profiles.update_one(
+            {"user_id": current_user['user_id']},
+            {"$inc": {"xp": xp}}
+        )
+        
+        return {"score": score, "analysis": analysis, "xp_earned": xp}
     
-    score, analysis = AIEngine.calculate_coding_score(code, test_cases, execution_results)
-    
-    # Save attempt
-    attempt = Attempt(
-        user_id=current_user['user_id'],
-        question_id=question_id,
-        question_type=QuestionType.CODING,
-        answer=code,
-        score=score,
-        time_taken=0,
-        mode=TestMode.PRACTICE,
-        feedback=str(analysis)
-    )
-    
-    attempt_dict = attempt.model_dump()
-    attempt_dict['created_at'] = attempt_dict['created_at'].isoformat()
-    await db.attempts.insert_one(attempt_dict)
-    
-    xp = AIEngine.calculate_xp_reward("question_attempt", score)
-    await db.profiles.update_one(
-        {"user_id": current_user['user_id']},
-        {"$inc": {"xp": xp}}
-    )
-    
-    return {"score": score, "analysis": analysis, "xp_earned": xp}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Code submission error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Submission failed: {str(e)}")
 
 # ============ COMMUNICATION ROUTES ============
 
