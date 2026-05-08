@@ -17,7 +17,10 @@ from models import *
 from auth import *
 from ai_engine import AIEngine
 from question_bank import QuestionBank
-from pydantic import EmailStr
+from topic_catalog import list_categories, list_topics, get_topic
+import question_service
+import ai_service
+from pydantic import EmailStr, BaseModel, Field
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -258,21 +261,177 @@ async def create_question(question_data: QuestionCreate, current_user: dict = De
     await db.questions.insert_one(question_dict)
     return question
 
+
+# ============ TOPIC CATALOG & SMART QUESTION ROUTES ============
+
+@api_router.get("/catalog/{module}")
+async def get_module_catalog(module: str, current_user: dict = Depends(get_current_user)):
+    """Return categories+topic counts for `aptitude` or `reasoning`."""
+    if module not in ("aptitude", "reasoning"):
+        raise HTTPException(status_code=400, detail="module must be 'aptitude' or 'reasoning'")
+    return {"module": module, "categories": list_categories(module)}
+
+
+@api_router.get("/catalog/{module}/{category}/topics")
+async def get_topics_for_category(
+    module: str, category: str, current_user: dict = Depends(get_current_user)
+):
+    if module not in ("aptitude", "reasoning"):
+        raise HTTPException(status_code=400, detail="module must be 'aptitude' or 'reasoning'")
+    topics = list_topics(category)
+    if not topics:
+        raise HTTPException(status_code=404, detail="Category not found")
+    return {"module": module, "category": category, "topics": topics}
+
+
+class TopicQuestionRequest(BaseModel):
+    module: str = Field(..., pattern=r"^(aptitude|reasoning)$")
+    category: str
+    topic: Optional[str] = None
+    subtopic: Optional[str] = None
+    difficulty: str = Field("medium", pattern=r"^(easy|medium|hard)$")
+    count: int = Field(10, ge=1, le=30)
+    seen_ids: List[str] = []
+    allow_generation: bool = True
+
+
+@api_router.post("/questions/topic")
+async def get_topic_questions(
+    payload: TopicQuestionRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Smart endpoint: pulls from seed + cache + Gemini-generated to satisfy the
+    requested count, while excluding any seen ids."""
+    questions = await question_service.get_questions(
+        db,
+        module=payload.module,
+        category=payload.category,
+        topic=payload.topic,
+        difficulty=payload.difficulty,
+        count=payload.count,
+        seen_ids=payload.seen_ids,
+        subtopic=payload.subtopic,
+        allow_generation=payload.allow_generation,
+    )
+    return {
+        "count": len(questions),
+        "requested": payload.count,
+        "questions": questions,
+    }
+
+
+# ============ CHATBOT ROUTES ============
+
+class ChatMessageRequest(BaseModel):
+    session_id: Optional[str] = None
+    message: str
+
+
+@api_router.post("/chatbot/message")
+async def chatbot_message(
+    payload: ChatMessageRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    user_id = current_user['user_id']
+    session_id = payload.session_id or str(uuid.uuid4())
+
+    # Load history for this session
+    cursor = db.chatbot_messages.find(
+        {"user_id": user_id, "session_id": session_id},
+        {"_id": 0, "role": 1, "content": 1, "created_at": 1}
+    ).sort("created_at", 1)
+    history = [doc async for doc in cursor]
+
+    # Add user message
+    user_msg = {
+        "id": str(uuid.uuid4()),
+        "user_id": user_id,
+        "session_id": session_id,
+        "role": "user",
+        "content": payload.message,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.chatbot_messages.insert_one(user_msg.copy())
+
+    # Generate reply
+    reply_text = await ai_service.chatbot_reply(
+        session_id=session_id,
+        history=history,
+        user_text=payload.message,
+    )
+
+    # Save assistant reply
+    assistant_msg = {
+        "id": str(uuid.uuid4()),
+        "user_id": user_id,
+        "session_id": session_id,
+        "role": "assistant",
+        "content": reply_text,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.chatbot_messages.insert_one(assistant_msg.copy())
+
+    return {
+        "session_id": session_id,
+        "reply": reply_text,
+        "message_id": assistant_msg["id"],
+    }
+
+
+@api_router.get("/chatbot/history")
+async def chatbot_history(
+    session_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    cursor = db.chatbot_messages.find(
+        {"user_id": current_user['user_id'], "session_id": session_id},
+        {"_id": 0, "id": 1, "role": 1, "content": 1, "created_at": 1}
+    ).sort("created_at", 1)
+    return {"session_id": session_id, "messages": [doc async for doc in cursor]}
+
+
+@api_router.delete("/chatbot/session")
+async def chatbot_clear_session(
+    session_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    await db.chatbot_messages.delete_many({
+        "user_id": current_user['user_id'],
+        "session_id": session_id,
+    })
+    return {"deleted": True, "session_id": session_id}
+
 # ============ ATTEMPT ROUTES ============
 
 @api_router.post("/attempts")
 async def submit_attempt(attempt_data: AttemptCreate, current_user: dict = Depends(get_current_user)):
-    # Get question - try from database first
-    question = await db.questions.find_one({"id": attempt_data.question_id}, {"_id": 0})
-    
+    qid = attempt_data.question_id
+    # Get question - try DB question collection first
+    question = await db.questions.find_one({"id": qid}, {"_id": 0})
+
     if not question:
-        # Try from question bank using title as fallback
-        all_questions = (QuestionBank.APTITUDE_QUESTIONS + QuestionBank.REASONING_QUESTIONS + 
-                        QuestionBank.CODING_QUESTIONS + QuestionBank.COMMUNICATION_QUESTIONS)
-        question = next((q for q in all_questions if q.get('title') == attempt_data.question_id), None)
-        if not question:
-            # If still not found, return success anyway to not break UX
-            return {"attempt": {"score": 0, "is_correct": False}, "xp_earned": 5}
+        # Try AI-generated cache by hash
+        question = await db.question_cache.find_one(
+            {"question_hash": qid}, {"_id": 0}
+        )
+
+    if not question:
+        # Try seed bank: by computed hash
+        all_seed = (QuestionBank.APTITUDE_QUESTIONS + QuestionBank.REASONING_QUESTIONS +
+                    QuestionBank.CODING_QUESTIONS + QuestionBank.COMMUNICATION_QUESTIONS)
+        question = next(
+            (q for q in all_seed if question_service.question_id(q) == qid),
+            None,
+        )
+
+    if not question:
+        # Legacy fallback: title match
+        all_seed = (QuestionBank.APTITUDE_QUESTIONS + QuestionBank.REASONING_QUESTIONS +
+                    QuestionBank.CODING_QUESTIONS + QuestionBank.COMMUNICATION_QUESTIONS)
+        question = next((q for q in all_seed if q.get('title') == qid), None)
+
+    if not question:
+        raise HTTPException(status_code=404, detail="Question not found")
     
     # Calculate score
     score = AIEngine.calculate_score(

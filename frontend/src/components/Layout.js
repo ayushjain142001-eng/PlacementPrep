@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Home, Brain, Puzzle, MessageSquare, Code, Video,
   FileText, Calendar, User, Settings, LogOut, Menu,
-  X, Sun, Moon, Trophy, Zap, BookOpen, Users
+  X, Sun, Moon, Trophy, Zap, BookOpen, Users, Sparkles
 } from 'lucide-react';
 
 const Layout = () => {
@@ -30,6 +30,7 @@ const Layout = () => {
     { name: 'Guide', path: '/guide', icon: BookOpen },
     { name: 'Study Groups', path: '/study-groups', icon: Users },
     { name: 'Leaderboard', path: '/leaderboard', icon: Trophy },
+    { name: 'Developer', path: '/developer', icon: Sparkles },
   ];
 
   const isActive = (path) => location.pathname === path;

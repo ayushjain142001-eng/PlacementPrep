@@ -25,7 +25,9 @@ import AdminPanel from './pages/AdminPanel';
 import LeaderboardPage from './pages/LeaderboardPage';
 import GuidePage from './pages/GuidePage';
 import StudyGroupsPage from './pages/StudyGroupsPage';
+import DeveloperPage from './pages/DeveloperPage';
 import Layout from './components/Layout';
+import Chatbot from './components/Chatbot';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -140,6 +142,12 @@ const AppRoutes = () => {
             <StudyGroupsPage />
           </ProtectedRoute>
         } />
+
+        <Route path="/developer" element={
+          <ProtectedRoute>
+            <DeveloperPage />
+          </ProtectedRoute>
+        } />
       </Route>
     </Routes>
   );
@@ -151,6 +159,7 @@ function App() {
       <AuthProvider>
         <BrowserRouter>
           <AppRoutes />
+          <Chatbot />
           <Toaster position="bottom-right" richColors />
         </BrowserRouter>
       </AuthProvider>
