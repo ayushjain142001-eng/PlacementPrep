@@ -61,20 +61,22 @@ const CommunicationModule = () => {
 
     setSubmitting(true);
     const question = questions[currentQuestion];
-    
+
     try {
       const response = await api.post('/communication/analyze', {
         question_id: question.title,
         text: answer,
-        duration: recordingTime
+        duration: recordingTime,
+        mode: recordingTime > 0 ? 'audio' : 'text',
       });
-      
+
       const { analysis: result, xp_earned } = response.data;
       setAnalysis(result);
-      
+
       toast.success(`+${xp_earned} XP earned!`);
     } catch (error) {
-      toast.error('Analysis failed');
+      const msg = error?.response?.data?.detail || 'Analysis failed. Please try again.';
+      toast.error(msg);
     } finally {
       setSubmitting(false);
     }

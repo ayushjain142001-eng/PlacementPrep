@@ -6,36 +6,37 @@
 
 @layer base {
   :root {
-    /* Dark mode - Modern Professional Palette */
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 217.2 32.6% 17.5%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 263 70% 60%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 263 70% 60%;
+    /* Dark mode — User-specified premium palette */
+    /* Background #0F172A, Surface #1E293B, Primary #3B82F6, Text #E2E8F0 */
+    --background: 222 47% 11%;       /* #0F172A */
+    --foreground: 213 31% 91%;       /* #E2E8F0 */
+    --card: 217 33% 17%;             /* #1E293B */
+    --card-foreground: 213 31% 91%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 213 31% 91%;
+    --primary: 217 91% 60%;          /* #3B82F6 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 213 31% 91%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 33% 17%;
+    --accent-foreground: 213 31% 91%;
+    --destructive: 0 62.8% 50%;
+    --destructive-foreground: 213 31% 91%;
+    --border: 217 33% 22%;
+    --input: 217 33% 22%;
+    --ring: 217 91% 60%;
     --radius: 0.75rem;
-    
-    /* Custom theme variables */
-    --bg-primary: 222.2 84% 4.9%;
-    --bg-secondary: 217.2 32.6% 17.5%;
-    --bg-tertiary: 217.2 32.6% 12%;
-    --glass-bg: 0 0% 100% / 0.05;
-    --glass-border: 0 0% 100% / 0.1;
-    
-    /* Semantic colors - Dark Mode */
+
+    /* Custom theme tokens */
+    --bg-primary: 222 47% 11%;
+    --bg-secondary: 217 33% 17%;
+    --bg-tertiary: 217 33% 14%;
+    --glass-bg: 0 0% 100% / 0.04;
+    --glass-border: 0 0% 100% / 0.08;
+
+    /* Semantic colors — Dark Mode */
     --color-success: 160 84% 39%;
     --color-warning: 25 95% 53%;
     --color-info: 199 89% 48%;
@@ -45,35 +46,36 @@
   }
 
   .light {
-    /* Light mode - Clean Professional Design */
-    --background: 0 0% 98%;
-    --foreground: 222.2 47.4% 11.2%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 47.4% 11.2%;
+    /* Light mode — User-specified premium palette */
+    /* Background #F8FAFC, Surface #FFFFFF, Primary #2563EB, Text #0F172A, Border #E2E8F0 */
+    --background: 210 40% 98%;       /* #F8FAFC */
+    --foreground: 222 47% 11%;       /* #0F172A */
+    --card: 0 0% 100%;               /* #FFFFFF */
+    --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 47.4% 11.2%;
-    --primary: 263 70% 50%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 221 83% 53%;          /* #2563EB */
     --primary-foreground: 0 0% 100%;
-    --secondary: 220 14.3% 95.9%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 220 8.9% 46.1%;
-    --accent: 220 14.3% 95.9%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
+    --secondary: 213 27% 84%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 263 70% 50%;
-    
-    /* Custom theme variables */
-    --bg-primary: 0 0% 98%;
-    --bg-secondary: 220 14.3% 95.9%;
-    --bg-tertiary: 220 13% 91%;
-    --glass-bg: 0 0% 100% / 0.9;
-    --glass-border: 220 13% 91%;
-    
-    /* Semantic colors - Light Mode */
+    --border: 213 27% 89%;           /* #E2E8F0 */
+    --input: 213 27% 89%;
+    --ring: 221 83% 53%;
+
+    /* Custom theme tokens */
+    --bg-primary: 210 40% 98%;
+    --bg-secondary: 0 0% 100%;
+    --bg-tertiary: 213 27% 89%;
+    --glass-bg: 0 0% 100% / 0.85;
+    --glass-border: 213 27% 89%;
+
+    /* Semantic colors — Light Mode */
     --color-success: 160 84% 39%;
     --color-warning: 25 95% 53%;
     --color-info: 199 89% 48%;

@@ -1,40 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import {
-  Github, Linkedin, Mail, Globe, Sparkles, Code2, Layers, Cpu,
-  Palette, Database, Brain, Rocket, Heart,
+  Github, Linkedin, Mail, Globe, Sparkles, Layers,
+  Brain, Rocket, Heart,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
-
-const SKILLS = [
-  { name: 'React', key: 'react' },
-  { name: 'Next.js', key: 'next' },
-  { name: 'AI Integration', key: 'ai' },
-  { name: 'Node.js', key: 'node' },
-  { name: 'TypeScript', key: 'ts' },
-  { name: 'UI/UX Design', key: 'design' },
-  { name: 'FastAPI', key: 'fastapi' },
-  { name: 'MongoDB', key: 'mongo' },
-];
-
-const SkillIcon = ({ k }) => {
-  switch (k) {
-    case 'react': return <Code2 className="w-4 h-4 text-indigo-400" />;
-    case 'next': return <Rocket className="w-4 h-4 text-indigo-400" />;
-    case 'ai': return <Brain className="w-4 h-4 text-indigo-400" />;
-    case 'node': return <Cpu className="w-4 h-4 text-indigo-400" />;
-    case 'ts': return <Layers className="w-4 h-4 text-indigo-400" />;
-    case 'design': return <Palette className="w-4 h-4 text-indigo-400" />;
-    case 'fastapi': return <Sparkles className="w-4 h-4 text-indigo-400" />;
-    case 'mongo': return <Database className="w-4 h-4 text-indigo-400" />;
-    default: return null;
-  }
-};
 
 const VISION = [
   { title: 'Built for Students', description: 'Crafted to help engineering students crack placements without paying for expensive coaching.', kind: 'heart' },
   { title: 'AI-Powered Coaching', description: 'Personalised practice via Gemini-driven question generation, conversational doubt-clearing, and dynamic feedback.', kind: 'brain' },
-  { title: 'End-to-End Ecosystem', description: 'Aptitude, reasoning, coding, communication, mock interviews, resume insights — all under one roof.', kind: 'layers' },
+  { title: 'End-to-End Ecosystem', description: 'Aptitude, reasoning, coding, communication, mock interviews — all under one roof.', kind: 'layers' },
   { title: 'Production-Grade', description: 'Built with scalable architecture, real-time updates, and modular components so it grows with the user.', kind: 'rocket' },
 ];
 
@@ -129,12 +104,12 @@ const DeveloperPage = () => {
       </section>
 
       {/* ABOUT */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+      <section className="max-w-3xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="md:col-span-2 glass rounded-2xl p-8 border border-border"
+          className="glass rounded-2xl p-8 border border-border"
         >
           <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
             <Heart className="w-6 h-6 text-pink-500" />
@@ -142,40 +117,15 @@ const DeveloperPage = () => {
           </h2>
           <div className="space-y-4 text-muted-foreground leading-relaxed">
             <p>
-              I'm Ayush — a full-stack engineer obsessed with building tools that empower students.
+              I&apos;m Ayush — a full-stack engineer obsessed with building tools that empower students.
               PlacementPrep started as a side-project to consolidate everything I wished I had during
               my own campus placement journey: structured practice, instant doubt-clearing, and a friendly
-              AI mentor that's available 24/7.
+              AI mentor that&apos;s available 24/7.
             </p>
             <p>
               The goal is simple: make placement preparation accessible, intelligent, and genuinely
               enjoyable. No more juggling 10 different apps for aptitude, coding, and interview prep.
             </p>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          className="glass rounded-2xl p-6 border border-border space-y-4"
-        >
-          <h3 className="font-semibold text-lg">Tech Stack</h3>
-          <div className="grid grid-cols-2 gap-3">
-            {SKILLS.map((s, i) => (
-              <motion.div
-                key={s.key}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.04 }}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card/50 border border-border hover:border-indigo-500/50 transition-colors"
-                data-testid={`skill-${s.key}`}
-              >
-                <SkillIcon k={s.key} />
-                <span className="text-sm font-medium">{s.name}</span>
-              </motion.div>
-            ))}
           </div>
         </motion.div>
       </section>

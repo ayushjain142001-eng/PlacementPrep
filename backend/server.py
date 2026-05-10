@@ -20,6 +20,8 @@ from question_bank import QuestionBank
 from topic_catalog import list_categories, list_topics, get_topic
 import question_service
 import ai_service
+import code_executor
+import json
 from pydantic import EmailStr, BaseModel, Field
 
 ROOT_DIR = Path(__file__).parent
@@ -499,101 +501,126 @@ async def submit_code(
     data: dict,
     current_user: dict = Depends(get_current_user)
 ):
+    """Submit code solution for evaluation against test cases.
+
+    Expects: question_id (str), code (str), language (str)
     """
-    Submit code solution for evaluation
-    
-    Expects:
-        - question_id: str
-        - code: str
-        - language: str
-    """
-    try:
-        question_id = data.get('question_id')
-        code = data.get('code')
-        language = data.get('language')
-        
-        # Validation
-        if not question_id:
-            raise HTTPException(status_code=400, detail="question_id is required")
-        if not code or not code.strip():
-            raise HTTPException(status_code=400, detail="Code cannot be empty")
-        if not language:
-            raise HTTPException(status_code=400, detail="language is required")
-        
-        # Valid languages
-        valid_languages = ['python', 'javascript', 'java', 'cpp']
-        if language not in valid_languages:
-            raise HTTPException(status_code=400, detail=f"Invalid language. Must be one of: {', '.join(valid_languages)}")
-        
-        # Mock execution results (in production, use secure sandbox)
-        test_cases = [{"input": {}, "output": True}] * 3
-        execution_results = [True, True, False]  # Mock: 2 out of 3 tests passed
-        
-        score, analysis = AIEngine.calculate_coding_score(code, test_cases, execution_results)
-        
-        # Save attempt
-        attempt = Attempt(
-            user_id=current_user['user_id'],
-            question_id=question_id,
-            question_type=QuestionType.CODING,
-            answer=code,
-            score=score,
-            time_taken=0,
-            mode=TestMode.PRACTICE,
-            feedback=str(analysis)
+    question_id = data.get('question_id')
+    code = data.get('code') or ''
+    language = (data.get('language') or '').lower()
+
+    if not question_id:
+        raise HTTPException(status_code=400, detail="question_id is required")
+    if not code or not code.strip():
+        raise HTTPException(status_code=400, detail="Code cannot be empty")
+    if language not in code_executor.SUPPORTED_LANGUAGES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Language '{language}' is not currently supported. Only Python is supported for evaluation right now."
         )
-        
-        attempt_dict = attempt.model_dump()
-        attempt_dict['created_at'] = attempt_dict['created_at'].isoformat()
-        await db.attempts.insert_one(attempt_dict)
-        
-        xp = AIEngine.calculate_xp_reward("question_attempt", score)
+
+    # Find the question (title or hash lookup, similar to attempts)
+    question = next(
+        (q for q in QuestionBank.CODING_QUESTIONS
+         if q.get('title') == question_id or question_service.question_id(q) == question_id),
+        None,
+    )
+    if not question:
+        raise HTTPException(status_code=404, detail="Coding question not found")
+
+    test_cases = question.get('test_cases') or []
+    if not test_cases:
+        raise HTTPException(status_code=500, detail="This question has no test cases")
+
+    function_name = code_executor.infer_function_name(question.get('description', ''), 'solve')
+
+    try:
+        eval_result = await code_executor.evaluate_python(
+            code=code, function_name=function_name, test_cases=test_cases,
+        )
+    except Exception as e:
+        logger.exception("Code evaluation crashed")
+        raise HTTPException(status_code=500, detail=f"Evaluation engine error: {e}")
+
+    score = eval_result["score_pct"]
+    is_correct = eval_result["passed"] == eval_result["total"] and eval_result["total"] > 0
+
+    attempt_doc = {
+        "id": str(uuid.uuid4()),
+        "user_id": current_user['user_id'],
+        "question_id": question_id,
+        "question_type": "coding",
+        "answer": code,
+        "is_correct": is_correct,
+        "score": score,
+        "time_taken": int(data.get('time_taken') or 0),
+        "mode": "practice",
+        "feedback": json.dumps({k: v for k, v in eval_result.items() if k != "results"}),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.attempts.insert_one(attempt_doc.copy())
+
+    xp = AIEngine.calculate_xp_reward("question_attempt", score) if score > 0 else 0
+    if xp:
         await db.profiles.update_one(
             {"user_id": current_user['user_id']},
-            {"$inc": {"xp": xp}}
+            {"$inc": {"xp": xp}},
         )
-        
-        return {"score": score, "analysis": analysis, "xp_earned": xp}
-    
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Code submission error: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Submission failed: {str(e)}")
+
+    return {
+        "score": score,
+        "passed": eval_result["passed"],
+        "total": eval_result["total"],
+        "is_correct": is_correct,
+        "results": eval_result["results"],
+        "error": eval_result.get("error"),
+        "xp_earned": xp,
+    }
+
 
 # ============ COMMUNICATION ROUTES ============
 
+class CommunicationAnalyzeRequest(BaseModel):
+    question_id: str
+    text: str = ""
+    duration: int = 0
+    mode: str = "text"  # 'text' or 'audio'
+
+
 @api_router.post("/communication/analyze")
 async def analyze_communication(
-    question_id: str,
-    text: str,
-    duration: int,
+    payload: CommunicationAnalyzeRequest,
     current_user: dict = Depends(get_current_user)
 ):
-    analysis = AIEngine.analyze_communication(text, duration)
-    
-    # Save attempt
-    attempt = Attempt(
-        user_id=current_user['user_id'],
-        question_id=question_id,
-        question_type=QuestionType.COMMUNICATION,
-        answer=text,
-        score=analysis['confidence_score'],
-        time_taken=duration,
-        mode=TestMode.PRACTICE,
-        feedback=str(analysis['feedback'])
-    )
-    
-    attempt_dict = attempt.model_dump()
-    attempt_dict['created_at'] = attempt_dict['created_at'].isoformat()
-    await db.attempts.insert_one(attempt_dict)
-    
+    text = (payload.text or "").strip()
+    if not text:
+        raise HTTPException(status_code=400, detail="Answer text is empty. Type or transcribe your answer first.")
+    if len(text) < 10:
+        raise HTTPException(status_code=400, detail="Answer is too short. Please write at least a couple of sentences.")
+
+    analysis = AIEngine.analyze_communication(text, payload.duration or 0)
+
+    attempt_doc = {
+        "id": str(uuid.uuid4()),
+        "user_id": current_user['user_id'],
+        "question_id": payload.question_id,
+        "question_type": "communication",
+        "answer": text,
+        "is_correct": analysis['confidence_score'] >= 70,
+        "score": analysis['confidence_score'],
+        "time_taken": payload.duration or 0,
+        "mode": payload.mode,
+        "feedback": json.dumps(analysis.get('feedback', [])),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.attempts.insert_one(attempt_doc.copy())
+
     xp = AIEngine.calculate_xp_reward("question_attempt", analysis['confidence_score'])
     await db.profiles.update_one(
         {"user_id": current_user['user_id']},
-        {"$inc": {"xp": xp}}
+        {"$inc": {"xp": xp}},
     )
-    
+
     return {"analysis": analysis, "xp_earned": xp}
 
 # ============ INTERVIEW ROUTES ============
@@ -616,34 +643,40 @@ async def start_interview(session_data: InterviewSessionCreate, current_user: di
     # Return without _id
     return session_dict
 
+class InterviewRespondRequest(BaseModel):
+    question_index: int
+    response: str
+
+
 @api_router.post("/interviews/{session_id}/respond")
 async def respond_to_interview(
     session_id: str,
-    question_index: int,
-    response: str,
+    payload: InterviewRespondRequest,
     current_user: dict = Depends(get_current_user)
 ):
     session = await db.interviews.find_one({"id": session_id, "user_id": current_user['user_id']}, {"_id": 0})
     if not session:
         raise HTTPException(status_code=404, detail="Interview session not found")
-    
-    # Analyze response
-    analysis = AIEngine.analyze_communication(response, 60)
-    
-    # Update session
+
+    response_text = (payload.response or "").strip()
+    if not response_text:
+        raise HTTPException(status_code=400, detail="Response is empty")
+
+    analysis = AIEngine.analyze_communication(response_text, 60)
+
     response_data = {
-        "question_index": question_index,
-        "response": response,
+        "question_index": payload.question_index,
+        "response": response_text,
         "score": analysis['confidence_score'],
         "feedback": analysis['feedback'],
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
-    
+
     await db.interviews.update_one(
         {"id": session_id},
         {"$push": {"responses": response_data}}
     )
-    
+
     return {"analysis": analysis}
 
 @api_router.post("/interviews/{session_id}/complete")

@@ -1,0 +1,40 @@
+{
+  "summary": "Iteration 6 (FINAL stabilization pass): Backend 15/15 pytest tests passed for the rewritten /coding/submit (real Python subprocess sandbox), /communication/analyze and /interviews/{id}/respond (Pydantic body models). All boundary cases verified: boilerplate `pass` → score=0/is_correct=false/passed=0; empty code → 400; correct twoSum solution → 100/2-of-2/is_correct=true; language='javascript' → 400; broken syntax → score=0 with results[].error; query-param calls to communication/analyze and interviews/respond are now rejected (422). Frontend: /resume shows Coming Soon (no upload, has Practice Interview + Solve Coding buttons), /developer no Tech Stack section, /leaderboard relabeled 'Practice Points' (11 occurrences) — sole remaining `XP` is in the sidebar profile widget (out of scope). Dark mode body bg = rgb(15,23,41) ≈ #0F172A ✓, Submit button bg = blue #3B82F6 ✓. Coding language dropdown correctly disables JS/Java/C++ with '(coming soon)' labels ✓. ZERO console errors during all flows. Found ONE frontend display bug: CodingModule submission-results card shows '0/0' instead of '0/2' because legacy keys `passed_tests`/`total_tests` are referenced but handleSubmit now stores `passed`/`total`. Scoring backend works correctly — only the display card is wrong.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/coding/submit", "issue": "is_boilerplate() in code_executor.py fails to detect indented `pass` because non_decl_lines list keeps leading whitespace ('    pass') and compares to ['pass']. Functional outcome still correct (score=0 because `pass` returns None ≠ expected), but no friendly 'Implement the function first' error is surfaced — backend ends up running the placeholder through the subprocess and reporting per-test got=None failures instead."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "CodingModule.js — Submission Results card (line 426)", "issue": "Displays 'Tests Passed 0/0' for every submission because the JSX reads testResults.passed_tests / total_tests but handleSubmit (line 220-228) stores them as testResults.passed / total. Same card line 432 reads testResults.quality (never set → 0/30) and line 445 references testResults.feedback (never set). Score and XP fields ARE wired correctly.", "selector": "div:has-text('Tests Passed')", "priority": "HIGH"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Leaderboard / global", "issues": ["Avatar circles, trophy icons, and 'Made with Emergent' badge still render in PURPLE/violet gradient — visually inconsistent with the new blue primary (#3B82F6) palette. Spec said primary buttons should be blue not purple, but the avatars+icons+monogram gradients in components/ui and pages weren't migrated. Buttons themselves ARE correctly blue."]},
+      {"screen": "CodingModule submission card", "issues": ["Trophy icon, Code Quality panel border, and Score number are violet-tinted (text-violet-500/violet-400, from-violet-500/10) — same purple-vs-blue inconsistency. Theme migration appears CSS-variable-only and didn't touch hard-coded violet-* / purple-* Tailwind utilities throughout the app."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_iter6.py", "/app/test_reports/pytest/pytest_results_iteration6.xml"],
+  "action_items": [
+    "Fix CodingModule.js line 426: change `testResults.passed_tests || 0` → `testResults.passed ?? 0` and `testResults.total_tests || 0` → `testResults.total ?? 0`. Also remove or wire up testResults.quality and testResults.feedback (currently always 0/30 and absent).",
+    "(Optional) Fix is_boilerplate() in code_executor.py: strip each line before adding to non_decl_lines so indented `pass` is detected. Current code: `non_decl_lines = [ln for ln in stripped.splitlines() if ln.strip() and not ln.strip().startswith(...)]` — should be `... [ln.strip() for ln in ... if ln.strip() and not ln.strip().startswith(...)]`.",
+    "(Theme polish) Sweep frontend for `violet-` / `purple-` Tailwind classes and replace with blue/indigo to fully match the new palette. Sidebar profile widget still says '473 XP' — relabel to 'Practice Points' for consistency with Leaderboard."
+  ],
+  "critical_code_review_comments": [
+    "CodingModule.js handleSubmit and the JSX results card are now out of sync after the response-shape change — classic refactor regression. A quick TypeScript/PropTypes layer on testResults would have caught this at build time.",
+    "code_executor.is_boilerplate uses a filter+compare that mismatches indentation — should normalise with .strip() before comparison; otherwise the boilerplate fast-path is effectively dead code.",
+    "Frontend palette migration was done only at the CSS-variable level (index.css :root / .light) — hard-coded Tailwind colour utilities (violet-*, purple-*) were not migrated. Consider replacing them with semantic classes like text-primary / bg-primary so future palette changes propagate automatically.",
+    "/api/coding/submit returns `error: None` in the JSON when there is no error — consider omitting the key (or returning empty string) so client-side `error || ...` fall-through is cleaner.",
+    "server.py /coding/submit and /attempts both calculate XP and update profile.xp — but the response field is named `xp_earned` in both and the leaderboard column is now labelled 'Practice Points'. The internal field name remains xp/XP — fine as long as the public API contract is documented, but consider aliasing to keep the naming aligned."
+  ],
+  "updated_files": ["/app/backend/tests/test_iter6.py"],
+  "success_rate": {"backend": "100% (15/15)", "frontend": "≈90% — all functional flows work, one display card shows 0/0 instead of 0/2"},
+  "test_credentials": "test@example.com / Test@123 (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "None — reused existing test user. No DB writes outside what /api/attempts and /api/coding/submit perform during their own integration tests.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "The new Python sandbox (/app/backend/code_executor.py) is solid — works under subprocess with -I flag, JSON I/O harness, 6-second timeout per test case, robust _equal() for list/numeric compare. Backend regression suite is /app/backend/tests/test_iter6.py (15 tests, ~0.6s runtime, no flakes). Frontend issue is purely in CodingModule.js JSX field-name mismatch (passed_tests vs passed). Communication and Interview body-vs-query refactors verified working both for accepting JSON and rejecting query-params with 422.",
+  "rca of the issue": "CodingModule submission card shows 0/0: in handleSubmit the API response is destructured to {score, passed, total, is_correct, results, error, xp_earned} and stored on state with the same property names — but the JSX in the Submission Results card was never updated when the response shape changed; it still reads testResults.passed_tests / testResults.total_tests (old shape from the previous hardcoded [T,T,F] evaluator era). Fix: rename JSX field reads to `passed` / `total` (and use ?? 0 since 0 is a valid value). Reproduce: login → /coding → write any code → Submit → 'Tests Passed' shows 0/0 regardless of actual result. Score field is correct because handleSubmit stores Math.round(score) under the same `score` key both sides expected."
+}

@@ -90,7 +90,7 @@ const InterviewModule = () => {
       }
     } catch (error) {
       console.error('Response error:', error);
-      toast.error('Failed to submit response');
+      toast.error(error?.response?.data?.detail || 'Failed to submit response. Please try again.');
     }
   };
 

@@ -1,256 +1,80 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import api from '../utils/api';
-import { toast } from 'sonner';
-import { FileText, Upload, CheckCircle, AlertCircle, Sparkles, Download } from 'lucide-react';
+import { FileText, Sparkles, Clock, Brain, Lock } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { Progress } from '../components/ui/progress';
+import { useNavigate } from 'react-router-dom';
 
 const ResumeModule = () => {
-  const [file, setFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [analysis, setAnalysis] = useState(null);
+  const navigate = useNavigate();
 
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile) {
-      if (selectedFile.type === 'application/pdf' || selectedFile.name.endsWith('.pdf')) {
-        setFile(selectedFile);
-        toast.success('Resume selected!');
-      } else {
-        toast.error('Please upload a PDF file');
-      }
-    }
-  };
-
-  const handleUpload = async () => {
-    if (!file) {
-      toast.error('Please select a file first');
-      return;
-    }
-
-    setUploading(true);
-    
-    try {
-      // Simulate file upload and analysis
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Mock analysis data
-      const mockAnalysis = {
-        skills: ['Python', 'React', 'Node.js', 'MongoDB', 'AWS', 'Docker'],
-        education: ['B.TECH', 'COMPUTER SCIENCE'],
-        years_experience: 2,
-        projects_count: 4,
-        completeness: 75,
-        suggestions: [
-          'Add more quantifiable achievements',
-          'Include relevant certifications',
-          'Expand on project impact and results',
-          'Add links to GitHub/Portfolio'
-        ],
-        strengths: [
-          'Strong technical skills section',
-          'Good project descriptions',
-          'Clear education details'
-        ],
-        improvements: [
-          'Add more action verbs',
-          'Quantify your achievements with metrics',
-          'Include soft skills'
-        ]
-      };
-      
-      setAnalysis(mockAnalysis);
-      toast.success('Resume analyzed successfully!');
-    } catch (error) {
-      toast.error('Failed to analyze resume');
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const reset = () => {
-    setFile(null);
-    setAnalysis(null);
-  };
+  const features = [
+    { icon: Brain, title: 'AI-Powered Analysis', description: 'Deep semantic analysis of your resume content using advanced NLP.' },
+    { icon: Sparkles, title: 'Tailored Suggestions', description: 'Get specific, actionable improvements based on your target role.' },
+    { icon: FileText, title: 'ATS Compatibility', description: 'Check if your resume passes Applicant Tracking Systems.' },
+    { icon: Lock, title: 'Privacy First', description: 'Your resume never leaves our secure servers — fully local processing.' },
+  ];
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8" data-testid="resume-module">
-      <div>
-        <h1 className="text-4xl font-bold mb-2">Resume Analysis</h1>
-        <p className="text-muted-foreground">Upload your resume and get AI-powered feedback</p>
+    <div className="space-y-8 max-w-5xl mx-auto" data-testid="resume-coming-soon">
+      <div className="text-center space-y-3">
+        <motion.div
+          initial={{ scale: 0.85, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5, type: 'spring' }}
+          className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-xl shadow-indigo-500/30"
+        >
+          <FileText className="w-10 h-10 text-white" />
+        </motion.div>
+        <h1 className="text-4xl font-bold">Resume Analysis</h1>
+        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 text-amber-500 text-sm font-medium border border-amber-500/30">
+          <Clock className="w-4 h-4" />
+          Coming Soon
+        </span>
+        <p className="text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed">
+          We&apos;re crafting a genuinely useful resume analyser — one that gives you real, accurate
+          feedback instead of generic templated suggestions. It will be available soon.
+        </p>
       </div>
 
-      {!analysis ? (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="glass p-12 rounded-2xl"
-        >
-          <div className="text-center space-y-6">
-            <div className="w-24 h-24 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto">
-              <FileText className="w-12 h-12 text-white" />
-            </div>
-            
-            <div>
-              <h2 className="text-2xl font-bold mb-2">Upload Your Resume</h2>
-              <p className="text-muted-foreground">PDF format, max 5MB</p>
-            </div>
-
-            <div className="border-2 border-dashed border-slate-700 rounded-xl p-12 hover:border-indigo-500 transition-colors">
-              <input
-                type="file"
-                accept=".pdf"
-                onChange={handleFileChange}
-                className="hidden"
-                id="resume-upload"
-              />
-              <label htmlFor="resume-upload" className="cursor-pointer">
-                <div className="flex flex-col items-center gap-4">
-                  <Upload className="w-16 h-16 text-muted-foreground" />
-                  <div>
-                    <p className="text-lg font-semibold">Click to upload or drag and drop</p>
-                    <p className="text-sm text-slate-500">PDF files only</p>
-                  </div>
-                </div>
-              </label>
-            </div>
-
-            {file && (
-              <div className="flex items-center justify-center gap-3 bg-indigo-500/10 border border-indigo-500/30 p-4 rounded-lg">
-                <FileText className="w-5 h-5 text-indigo-400" />
-                <span className="text-indigo-400 font-medium">{file.name}</span>
-                <CheckCircle className="w-5 h-5 text-green-500" />
-              </div>
-            )}
-
-            <Button
-              onClick={handleUpload}
-              disabled={!file || uploading}
-              size="lg"
-              className="btn-glow"
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {features.map((f, i) => {
+          const Icon = f.icon;
+          return (
+            <motion.div
+              key={f.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.08 }}
+              className="glass rounded-2xl p-6 border border-border opacity-80"
+              data-testid={`resume-feature-${i}`}
             >
-              {uploading ? (
-                <div className="flex items-center gap-2">
-                  <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
-                  <span>Analyzing...</span>
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center flex-shrink-0">
+                  <Icon className="w-6 h-6 text-indigo-400" />
                 </div>
-              ) : (
-                <>
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  Analyze Resume
-                </>
-              )}
-            </Button>
-          </div>
-        </motion.div>
-      ) : (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-6"
-        >
-          {/* Completeness Score */}
-          <div className="glass p-8 rounded-2xl">
-            <h3 className="text-2xl font-bold mb-6">Resume Completeness</h3>
-            <div className="flex items-center gap-6">
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-muted-foreground">Overall Score</span>
-                  <span className="text-3xl font-bold gradient-text">{analysis.completeness}%</span>
+                <div>
+                  <h3 className="font-semibold mb-1">{f.title}</h3>
+                  <p className="text-sm text-muted-foreground">{f.description}</p>
                 </div>
-                <Progress value={analysis.completeness} className="h-4" />
               </div>
-            </div>
-          </div>
+            </motion.div>
+          );
+        })}
+      </div>
 
-          {/* Skills */}
-          <div className="glass p-8 rounded-2xl">
-            <h3 className="text-2xl font-bold mb-4">Extracted Skills</h3>
-            <div className="flex flex-wrap gap-2">
-              {analysis.skills.map((skill, idx) => (
-                <span key={idx} className="px-4 py-2 bg-indigo-500/20 text-indigo-400 rounded-full border border-indigo-500/30">
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Key Info */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="glass p-6 rounded-2xl">
-              <div className="text-sm text-muted-foreground mb-2">Experience</div>
-              <div className="text-3xl font-bold">{analysis.years_experience} years</div>
-            </div>
-            <div className="glass p-6 rounded-2xl">
-              <div className="text-sm text-muted-foreground mb-2">Projects</div>
-              <div className="text-3xl font-bold">{analysis.projects_count}</div>
-            </div>
-            <div className="glass p-6 rounded-2xl">
-              <div className="text-sm text-muted-foreground mb-2">Education</div>
-              <div className="text-lg font-bold">{analysis.education.join(', ')}</div>
-            </div>
-          </div>
-
-          {/* Strengths */}
-          <div className="glass p-8 rounded-2xl">
-            <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
-              <CheckCircle className="w-6 h-6 text-green-500" />
-              Strengths
-            </h3>
-            <div className="space-y-3">
-              {analysis.strengths.map((strength, idx) => (
-                <div key={idx} className="flex items-start gap-3 bg-green-500/10 p-4 rounded-lg border border-green-500/30">
-                  <span className="text-green-400">✓</span>
-                  <span className="text-foreground">{strength}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Improvements */}
-          <div className="glass p-8 rounded-2xl">
-            <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
-              <AlertCircle className="w-6 h-6 text-violet-500" />
-              Areas for Improvement
-            </h3>
-            <div className="space-y-3">
-              {analysis.improvements.map((improvement, idx) => (
-                <div key={idx} className="flex items-start gap-3 bg-violet-500/10 p-4 rounded-lg border border-orange-500/30">
-                  <span className="text-violet-400">⚠️</span>
-                  <span className="text-foreground">{improvement}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Suggestions */}
-          <div className="glass p-8 rounded-2xl">
-            <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
-              <Sparkles className="w-6 h-6 text-indigo-500" />
-              AI Suggestions
-            </h3>
-            <div className="space-y-3">
-              {analysis.suggestions.map((suggestion, idx) => (
-                <div key={idx} className="flex items-start gap-3 bg-indigo-500/10 p-4 rounded-lg border border-indigo-500/30">
-                  <span className="text-indigo-400">💡</span>
-                  <span className="text-foreground">{suggestion}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex gap-4">
-            <Button onClick={reset} variant="outline" className="flex-1">
-              Upload New Resume
-            </Button>
-            <Button className="flex-1 btn-glow">
-              <Download className="w-5 h-5 mr-2" />
-              Download Report
-            </Button>
-          </div>
-        </motion.div>
-      )}
+      <div className="text-center pt-4">
+        <p className="text-sm text-muted-foreground mb-4">
+          In the meantime, sharpen your interview answers and coding skills:
+        </p>
+        <div className="flex gap-3 justify-center flex-wrap">
+          <Button onClick={() => navigate('/interview')} variant="outline" data-testid="goto-interview-btn">
+            Practice Interview
+          </Button>
+          <Button onClick={() => navigate('/coding')} className="btn-glow" data-testid="goto-coding-btn">
+            Solve Coding Problems
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

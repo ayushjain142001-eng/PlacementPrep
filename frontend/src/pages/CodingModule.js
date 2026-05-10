@@ -207,54 +207,53 @@ Please check your code and try again.`;
 
     const question = questions[currentQuestion];
     setSubmitting(true);
-    
-    try {
-      console.log('Submitting code:', {
-        question_id: question.title,
-        language,
-        code_length: code.length
-      });
 
+    try {
       const response = await api.post('/coding/submit', {
         question_id: question.title,
         code: code,
-        language: language
+        language: language,
       });
-      
-      console.log('Submission response:', response.data);
-      
-      const { score, analysis, xp_earned } = response.data;
-      
-      // Update test results
+
+      const { score, passed, total, is_correct, results, error, xp_earned } = response.data;
+
       setTestResults({
-        ...analysis,
         score: Math.round(score),
-        xp: xp_earned
+        passed,
+        total,
+        is_correct,
+        results,
+        xp: xp_earned,
+        error,
       });
-      
-      // Show success feedback
-      if (score >= 70) {
-        toast.success(`🎉 Excellent! Score: ${Math.round(score)}% | +${xp_earned} XP`);
-      } else if (score >= 40) {
-        toast.info(`Good try! Score: ${Math.round(score)}% | +${xp_earned} XP`);
+
+      // Build a clean output panel
+      const lines = [];
+      lines.push(`Test cases: ${passed}/${total} passed`);
+      lines.push(`Score: ${Math.round(score)}%`);
+      if (error) lines.push(`\n⚠️  ${error}`);
+      (results || []).forEach((r, i) => {
+        lines.push(`\nTest ${i + 1}: ${r.passed ? '✅ PASS' : '❌ FAIL'}`);
+        if (!r.passed) {
+          lines.push(`  Expected: ${JSON.stringify(r.expected)}`);
+          lines.push(`  Got:      ${JSON.stringify(r.got)}`);
+          if (r.error) lines.push(`  Error:    ${r.error}`);
+        }
+      });
+      setOutput(lines.join('\n'));
+
+      if (is_correct) {
+        toast.success(`🎉 All tests passed! +${xp_earned} XP`);
+      } else if (passed > 0) {
+        toast.info(`${passed}/${total} tests passed`);
       } else {
-        toast.warning(`Keep practicing! Score: ${Math.round(score)}% | +${xp_earned} XP`);
+        toast.error(error || 'No tests passed. Review your logic.');
       }
     } catch (error) {
       console.error('Submission error:', error);
-      const errorMessage = error.response?.data?.detail || 
-                          error.message || 
-                          'Submission failed. Please try again.';
+      const errorMessage = error.response?.data?.detail || error.message || 'Submission failed. Please try again.';
       toast.error(errorMessage);
-      
-      // Show detailed error in output
-      setOutput(`❌ Submission Error:
-
-${errorMessage}
-
-${error.response?.data ? JSON.stringify(error.response.data, null, 2) : ''}
-
-Please check your network connection and try again.`);
+      setOutput(`❌ ${errorMessage}`);
     } finally {
       setSubmitting(false);
     }
@@ -344,9 +343,9 @@ Please check your network connection and try again.`);
             data-testid="language-selector"
           >
             <option value="python">🐍 Python</option>
-            <option value="javascript">📜 JavaScript</option>
-            <option value="java">☕ Java</option>
-            <option value="cpp">⚡ C++</option>
+            <option value="javascript" disabled>📜 JavaScript (coming soon)</option>
+            <option value="java" disabled>☕ Java (coming soon)</option>
+            <option value="cpp" disabled>⚡ C++ (coming soon)</option>
           </select>
         </div>
       </div>

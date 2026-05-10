@@ -61,7 +61,7 @@ const LeaderboardPage = () => {
               <div className="text-3xl font-bold gradient-text">#{userRank}</div>
               <div>
                 <div className="font-semibold">Your Rank</div>
-                <div className="text-sm text-muted-foreground">{profile?.xp || 0} XP</div>
+                <div className="text-sm text-muted-foreground">{profile?.xp || 0} Practice Points</div>
               </div>
             </div>
             <Trophy className="w-8 h-8 text-indigo-500" />
@@ -97,7 +97,7 @@ const LeaderboardPage = () => {
               <h3 className="text-xl font-bold mb-1">{entry.name || 'Anonymous'}</h3>
               <div className="flex items-center justify-center gap-2 text-muted-foreground mb-3">
                 <Zap className="w-4 h-4 text-violet-500" />
-                <span className="font-semibold">{entry.xp} XP</span>
+                <span className="font-semibold">{entry.xp} Practice Points</span>
               </div>
               <div className="text-sm text-slate-500">Level {entry.level}</div>
             </motion.div>
@@ -141,7 +141,7 @@ const LeaderboardPage = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <Zap className="w-5 h-5 text-violet-500" />
-                    <span className="font-semibold">{entry.xp} XP</span>
+                    <span className="font-semibold">{entry.xp} Practice Points</span>
                   </div>
                 </div>
               </motion.div>

@@ -166,10 +166,15 @@ const AptitudeModule = () => {
         correct: res.data.attempt.is_correct,
         score: res.data.attempt.score,
       }]);
-      toast.success(`+${res.data.xp_earned} XP earned!`);
-    } catch {
-      toast.error('Failed to record attempt');
-      setResults(prev => [...prev, { question: question.title, correct: false, score: 0 }]);
+      if (res.data.xp_earned) {
+        toast.success(`+${res.data.xp_earned} XP earned!`);
+      }
+    } catch (e) {
+      const msg = e?.response?.data?.detail || 'Failed to record attempt';
+      toast.error(msg);
+      // Locally record so progress isn't lost
+      const isCorrect = (question.correct_answer || '').trim().toLowerCase() === (selectedAnswer || '').trim().toLowerCase();
+      setResults(prev => [...prev, { question: question.title, correct: isCorrect, score: isCorrect ? 100 : 0 }]);
     }
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
