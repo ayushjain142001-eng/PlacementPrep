@@ -7,38 +7,46 @@ import {
 import { Button } from '../components/ui/button';
 
 const SKILLS = [
-  { name: 'React', icon: Code2 },
-  { name: 'Next.js', icon: Rocket },
-  { name: 'AI Integration', icon: Brain },
-  { name: 'Node.js', icon: Cpu },
-  { name: 'TypeScript', icon: Layers },
-  { name: 'UI/UX Design', icon: Palette },
-  { name: 'FastAPI', icon: Sparkles },
-  { name: 'MongoDB', icon: Database },
+  { name: 'React', key: 'react' },
+  { name: 'Next.js', key: 'next' },
+  { name: 'AI Integration', key: 'ai' },
+  { name: 'Node.js', key: 'node' },
+  { name: 'TypeScript', key: 'ts' },
+  { name: 'UI/UX Design', key: 'design' },
+  { name: 'FastAPI', key: 'fastapi' },
+  { name: 'MongoDB', key: 'mongo' },
 ];
 
+const SkillIcon = ({ k }) => {
+  switch (k) {
+    case 'react': return <Code2 className="w-4 h-4 text-indigo-400" />;
+    case 'next': return <Rocket className="w-4 h-4 text-indigo-400" />;
+    case 'ai': return <Brain className="w-4 h-4 text-indigo-400" />;
+    case 'node': return <Cpu className="w-4 h-4 text-indigo-400" />;
+    case 'ts': return <Layers className="w-4 h-4 text-indigo-400" />;
+    case 'design': return <Palette className="w-4 h-4 text-indigo-400" />;
+    case 'fastapi': return <Sparkles className="w-4 h-4 text-indigo-400" />;
+    case 'mongo': return <Database className="w-4 h-4 text-indigo-400" />;
+    default: return null;
+  }
+};
+
 const VISION = [
-  {
-    title: 'Built for Students',
-    description: 'Crafted to help engineering students crack placements without paying for expensive coaching.',
-    icon: Heart,
-  },
-  {
-    title: 'AI-Powered Coaching',
-    description: 'Personalised practice via Gemini-driven question generation, conversational doubt-clearing, and dynamic feedback.',
-    icon: Brain,
-  },
-  {
-    title: 'End-to-End Ecosystem',
-    description: 'Aptitude, reasoning, coding, communication, mock interviews, resume insights — all under one roof.',
-    icon: Layers,
-  },
-  {
-    title: 'Production-Grade',
-    description: 'Built with scalable architecture, real-time updates, and modular components so it grows with the user.',
-    icon: Rocket,
-  },
+  { title: 'Built for Students', description: 'Crafted to help engineering students crack placements without paying for expensive coaching.', kind: 'heart' },
+  { title: 'AI-Powered Coaching', description: 'Personalised practice via Gemini-driven question generation, conversational doubt-clearing, and dynamic feedback.', kind: 'brain' },
+  { title: 'End-to-End Ecosystem', description: 'Aptitude, reasoning, coding, communication, mock interviews, resume insights — all under one roof.', kind: 'layers' },
+  { title: 'Production-Grade', description: 'Built with scalable architecture, real-time updates, and modular components so it grows with the user.', kind: 'rocket' },
 ];
+
+const VisionIcon = ({ kind }) => {
+  switch (kind) {
+    case 'heart': return <Heart className="w-6 h-6 text-indigo-400" />;
+    case 'brain': return <Brain className="w-6 h-6 text-indigo-400" />;
+    case 'layers': return <Layers className="w-6 h-6 text-indigo-400" />;
+    case 'rocket': return <Rocket className="w-6 h-6 text-indigo-400" />;
+    default: return null;
+  }
+};
 
 const Avatar = () => (
   <motion.div
@@ -48,7 +56,6 @@ const Avatar = () => (
     className="relative w-44 h-44 md:w-56 md:h-56 mx-auto"
     data-testid="developer-avatar"
   >
-    {/* Animated gradient ring */}
     <motion.div
       className="absolute inset-0 rounded-full bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-1"
       animate={{ rotate: [0, 360] }}
@@ -56,13 +63,11 @@ const Avatar = () => (
     >
       <div className="w-full h-full rounded-full bg-background" />
     </motion.div>
-    {/* Inner monogram */}
     <div className="absolute inset-2 rounded-full bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center shadow-2xl">
-      <span className="text-6xl md:text-7xl font-extrabold text-white tracking-tighter font-display">
+      <span className="text-6xl md:text-7xl font-extrabold text-white tracking-tighter">
         AJ
       </span>
     </div>
-    {/* Floating sparkles */}
     <motion.div
       className="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/40 border-4 border-background"
       animate={{ y: [0, -6, 0] }}
@@ -71,21 +76,6 @@ const Avatar = () => (
       <Sparkles className="w-5 h-5 text-white" />
     </motion.div>
   </motion.div>
-);
-
-const SocialButton = ({ icon: Icon, label, href, testId }) => (
-  <a
-    href={href}
-    target="_blank"
-    rel="noreferrer"
-    className="group"
-    data-testid={testId}
-  >
-    <Button variant="outline" className="gap-2 border-indigo-500/30 hover:border-indigo-500/80 hover:bg-indigo-500/10">
-      <Icon className="w-4 h-4 group-hover:text-indigo-400 transition-colors" />
-      {label}
-    </Button>
-  </a>
 );
 
 const DeveloperPage = () => {
@@ -112,10 +102,26 @@ const DeveloperPage = () => {
                 Building AI-powered solutions for smarter placement preparation.
               </p>
               <div className="flex flex-wrap gap-3 pt-2">
-                <SocialButton icon={Linkedin} label="LinkedIn" href="https://linkedin.com" testId="social-linkedin" />
-                <SocialButton icon={Github} label="GitHub" href="https://github.com" testId="social-github" />
-                <SocialButton icon={Mail} label="Email" href="mailto:hello@example.com" testId="social-email" />
-                <SocialButton icon={Globe} label="Portfolio" href="https://example.com" testId="social-portfolio" />
+                <a href="https://linkedin.com" target="_blank" rel="noreferrer" data-testid="social-linkedin">
+                  <Button variant="outline" className="gap-2 border-indigo-500/30 hover:border-indigo-500/80 hover:bg-indigo-500/10">
+                    <Linkedin className="w-4 h-4" />LinkedIn
+                  </Button>
+                </a>
+                <a href="https://github.com" target="_blank" rel="noreferrer" data-testid="social-github">
+                  <Button variant="outline" className="gap-2 border-indigo-500/30 hover:border-indigo-500/80 hover:bg-indigo-500/10">
+                    <Github className="w-4 h-4" />GitHub
+                  </Button>
+                </a>
+                <a href="mailto:hello@example.com" data-testid="social-email">
+                  <Button variant="outline" className="gap-2 border-indigo-500/30 hover:border-indigo-500/80 hover:bg-indigo-500/10">
+                    <Mail className="w-4 h-4" />Email
+                  </Button>
+                </a>
+                <a href="https://example.com" target="_blank" rel="noreferrer" data-testid="social-portfolio">
+                  <Button variant="outline" className="gap-2 border-indigo-500/30 hover:border-indigo-500/80 hover:bg-indigo-500/10">
+                    <Globe className="w-4 h-4" />Portfolio
+                  </Button>
+                </a>
               </div>
             </motion.div>
           </div>
@@ -158,15 +164,15 @@ const DeveloperPage = () => {
           <div className="grid grid-cols-2 gap-3">
             {SKILLS.map((s, i) => (
               <motion.div
-                key={s.name}
+                key={s.key}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.04 }}
                 className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card/50 border border-border hover:border-indigo-500/50 transition-colors"
-                data-testid={`skill-${s.name.toLowerCase().replace(/\W+/g, '-')}`}
+                data-testid={`skill-${s.key}`}
               >
-                <s.icon className="w-4 h-4 text-indigo-400" />
+                <SkillIcon k={s.key} />
                 <span className="text-sm font-medium">{s.name}</span>
               </motion.div>
             ))}
@@ -196,7 +202,7 @@ const DeveloperPage = () => {
               data-testid={`vision-${i}`}
             >
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center mb-4">
-                <v.icon className="w-6 h-6 text-indigo-400" />
+                <VisionIcon kind={v.kind} />
               </div>
               <h3 className="font-semibold mb-2">{v.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{v.description}</p>
@@ -220,8 +226,16 @@ const DeveloperPage = () => {
             or want to collaborate, please reach out — every contribution shapes the platform.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <SocialButton icon={Mail} label="Send Feedback" href="mailto:hello@example.com" testId="contact-feedback" />
-            <SocialButton icon={Github} label="Star on GitHub" href="https://github.com" testId="contact-github" />
+            <a href="mailto:hello@example.com" data-testid="contact-feedback">
+              <Button variant="outline" className="gap-2 border-indigo-500/30 hover:border-indigo-500/80 hover:bg-indigo-500/10">
+                <Mail className="w-4 h-4" />Send Feedback
+              </Button>
+            </a>
+            <a href="https://github.com" target="_blank" rel="noreferrer" data-testid="contact-github">
+              <Button variant="outline" className="gap-2 border-indigo-500/30 hover:border-indigo-500/80 hover:bg-indigo-500/10">
+                <Github className="w-4 h-4" />Star on GitHub
+              </Button>
+            </a>
           </div>
         </motion.div>
       </section>

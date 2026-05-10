@@ -1,99 +1,116 @@
 # PlacementPrep — Product Requirements Document
 
 ## Original Problem Statement
-Build a production-style, full-stack AI-powered placement preparation & career coaching platform called **PlacementPrep**. Modules: Aptitude, Reasoning, Communication, Coding, Interview, Resume, Revision. Plus: Dashboard, Admin panel, Smart Onboarding, Product Tour, Gamification.
+Build a production-style, full-stack AI-powered placement preparation & career coaching platform called **PlacementPrep**. Modules: Aptitude, Reasoning, Communication, Coding, Interview, Resume, Revision. Plus: Dashboard, Admin panel, Smart Onboarding, Product Tour, Gamification, AI Chatbot, and Developer Profile.
 
 ## Constraints
 - Backend: Python/FastAPI (not Node)
 - Database: MongoDB via Motor
-- No paid LLMs or email providers — everything must be local/free
+- LLM: Google Gemini 2.5 Pro via Emergent Universal Key (free for the user)
 - Real-time WebSockets supported
 - Strict QA: zero partial fixes, full edge-case coverage
 
 ## Tech Stack
-- Frontend: React, TailwindCSS, shadcn/ui, framer-motion, Monaco Editor, react-joyride
-- Backend: FastAPI, Motor (MongoDB), JWT auth, WebSockets
+- Frontend: React, TailwindCSS, shadcn/ui, framer-motion, Monaco Editor, react-joyride, lucide-react
+- Backend: FastAPI, Motor (MongoDB), JWT auth, WebSockets, emergentintegrations (Gemini)
 - Testing: pytest (backend), Playwright (frontend via testing agent)
-
-## User Persona
-Strict "Principal Engineer / QA Lead" acting as PM. Expects end-to-end validation on every change.
 
 ## Architecture
 ```
 /app/
 ├── backend/
-│   ├── server.py              # FastAPI main (~860 lines, needs modularization)
+│   ├── server.py              # FastAPI main (~1000 lines, refactor pending)
 │   ├── models.py              # Pydantic models
 │   ├── auth.py                # JWT & password hashing
-│   ├── question_bank.py       # Seeded aptitude/reasoning/coding data with difficulty
-│   └── tests/                 # pytest suite (test_difficulty_filter.py added)
+│   ├── topic_catalog.py       # 52-topic catalog (27 quant + 15 logical + 10 verbal)
+│   ├── question_bank.py       # Curated seed questions
+│   ├── question_service.py    # Hybrid pipeline: seed + cache + Gemini generation
+│   ├── ai_service.py          # Gemini wrappers: generate_questions(), chatbot_reply()
+│   └── tests/                 # pytest suite
 ├── frontend/src/
 │   ├── contexts/              # AuthContext, ThemeContext
-│   ├── components/            # ProductTour, shadcn ui/
-│   └── pages/                 # Module pages
-└── memory/
-    ├── PRD.md
-    └── test_credentials.md
+│   ├── components/
+│   │   ├── Chatbot.js         # Floating AI assistant widget (per-user session)
+│   │   └── Layout.js          # App layout with sidebar
+│   └── pages/
+│       ├── AptitudeModule.js  # Cat→Topic→Subtopic→Difficulty→Mode→Test flow
+│       ├── DeveloperPage.js   # Ayush Jain profile with AJ monogram avatar
+│       └── …
+└── memory/PRD.md
 ```
 
 ## Test Credentials
-See `/app/memory/test_credentials.md` — `test@example.com / Test@123`.
+`/app/memory/test_credentials.md` — `test@example.com / Test@123`
 
 ---
 
 ## Implementation Status
 
-### ✅ Completed
-- Authentication (JWT register/login/reset-password flow)
-- Dashboard with XP / streak / hire-readiness score
-- Coding Module (Monaco editor, language switching, submission — stabilized)
-- Professional blue/slate theme (replaced childish yellow/amber)
-- Aptitude Module — **Topic → Difficulty → Mode → Test** flow (Feb 2026)
-- Reasoning Module — **Topic → Difficulty → Mode → Test** flow (Feb 2026)
-- Expanded question bank: 5+ hard questions per aptitude category, 4+ hard per reasoning
-- Backend `GET /api/questions/{type}` now filters by `category` + `difficulty` + returns unique questions (no artificial duplication)
-- CSS glass-bg bug fixed (`--glass-bg` was invalid HSL `255 255 255 / 0.05` → now `0 0% 100% / 0.05`)
-- Product Tour via react-joyride
-- Forgot Password dev-mode reset link
-- Profile Picture + Resume file upload endpoints
+### ✅ Completed (Feb 2026 — major upgrade)
+**Phase 1 — Aptitude Restructure**
+- 52-topic catalog: Quantitative (27), Logical Reasoning (15), Verbal Ability (10)
+- Each topic exposes 2–4 subtopics + 3 difficulty levels
+- New flow: Category → Topic → Subtopic (optional) → Difficulty → Mode → Test
+- Topic search filter on the topics screen
+- Hybrid question pipeline: curated seed + MongoDB cache + Gemini generation
+- Session-based non-repetition via `seen_ids` array
+- `/api/catalog/{module}` and `/api/catalog/{module}/{cat}/topics`
+- `/api/questions/topic` smart endpoint
 
-### 🟡 In Progress / Next Priority (per user)
-1. **Communication Module** (P1): fix voice recording → submission → analysis pipeline. Submit button should enable only when recording exists; fix "Analysis Failed" API error.
-2. **Resume Module** (P1): replace hallucinated skills with real local NLP extraction (pdfplumber + curated skills keyword dictionary — user approved defaults).
-3. **Interview Module** (P1): implement Chat + Audio dual-mode, fix "Failed to submit response" errors via WebSockets.
-4. **Coding Module**: add difficulty-based question selection (parity with Aptitude/Reasoning).
+**Phase 2 — AI Assistant Chatbot**
+- Floating chatbot widget mounted globally, available across all routes
+- Gemini 2.5 Pro via Emergent Universal Key (`emergentintegrations.LlmChat`)
+- Dynamic greeting using logged-in user's name
+- Multi-turn context (last 12 turns inlined as transcript — fast + cheap)
+- Per-user session id stored in localStorage (namespaced — no cross-user leakage)
+- `/api/chatbot/message`, `/api/chatbot/history`, `/api/chatbot/session` (DELETE)
+- Messages persisted in MongoDB `chatbot_messages` collection
+- Typing dots, smooth animations, dark/light theme support, mobile responsive
 
-### 🔵 Backlog / Future (P2–P3)
-- Refactor `server.py` (860+ lines) into modular `APIRouter`s (`/app/backend/routes/...`)
-- Intelligence Engine: dynamic skill-weight algorithms for personalized practice
-- Admin panel full CRUD for questions / users
-- Gamification: badges, leaderboards, daily challenges
-- Revision module content expansion
+**Phase 3 — Developer Profile + Polish**
+- `/developer` route with hero, about, tech stack, vision, contribute sections
+- Animated AJ monogram avatar (ready for real photo swap-in later)
+- Sidebar nav link added
+- Babel `<dynamic.icon />` JSX issue fixed with explicit icon switch components
 
-### Known Low-Priority Issues (from iteration_4 review)
-- `server.py` `get_questions` silently falls back if filter yields empty — consider 404
-- `POST /api/attempts` returns success with score=0 when question lookup fails (masks bugs)
-- `question_id` passed as title (not stable ID) — works via fallback lookup but fragile
+**Earlier (this session)**
+- Coding module stabilized (language switch, submission)
+- Aptitude/Reasoning difficulty system foundation + glass-bg CSS bug fix
+- Question bank expanded for hard tier
+- Theme refactored to professional blue/slate
+- Product Tour, Forgot Password, Profile/Resume upload
 
-## Key API Endpoints
-- `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/auth/reset-password`
-- `GET /api/questions/{type}?category=&difficulty=&count=`
-- `POST /api/attempts`
-- `POST /api/coding/submit`
-- `WS /api/interview/ws` (partial)
+### 🟡 Next Up (per remaining priorities)
+1. **Communication Module** (P1) — fix voice recording → submit pipeline (still broken)
+2. **Resume Module** (P1) — real local PDF NLP extraction (replace hallucinated skills)
+3. **Interview Module** (P1) — Chat + Audio dual-mode via WebSockets
+4. **Coding Module** (P2) — extend new topic/difficulty flow
+5. **server.py refactor** (P2) — split ~1000 lines into `/routes/*.py`
 
-## Key DB Schemas
-- `users`: `{_id, email, password_hash, xp, streak, hire_readiness_score}`
-- `attempts`: `{_id, user_id, module, score, xp_earned, data, timestamp}`
-- `profiles`, `resumes`, `communication_attempts`
+### 🔵 Backlog
+- Recommended-difficulty AI based on user accuracy
+- Admin CRUD panel polish, gamification, Revision content
+- spaCy NER for resume (heavier alternative)
+
+## Key API Endpoints (added in this iteration)
+- `GET  /api/catalog/{module}` — categories with topic counts
+- `GET  /api/catalog/{module}/{category}/topics`
+- `POST /api/questions/topic` — smart hybrid question fetch with `seen_ids` dedup
+- `POST /api/chatbot/message`
+- `GET  /api/chatbot/history?session_id=`
+- `DELETE /api/chatbot/session?session_id=`
+
+## Key DB Schemas (new collections)
+- `question_cache`: `{question_hash, category, topic, difficulty, title, description, options, correct_answer, source, created_at}`
+- `chatbot_messages`: `{id, user_id, session_id, role, content, created_at}`
 
 ## Testing
-- pytest suite at `/app/backend/tests/`
-- Test reports: `/app/test_reports/iteration_{1..4}.json`
-- Iteration 4 (Feb 2026): 9/9 backend tests PASS, full Aptitude+Reasoning 4-step frontend flow PASS
+- pytest suite at `/app/backend/tests/` (test_difficulty_filter.py + test_iter5.py)
+- Latest: iteration_5.json — **9/9 backend pass, 100% frontend E2E pass**
 
 ---
 
-## Changelog (recent)
-- **Feb 2026** — Difficulty Selection System shipped for Aptitude & Reasoning; CSS glass-bg fixed; question bank expanded; unique-question guarantee added.
-- **Prev** — Coding module stabilized (language switch, submission); theme refactored to blue/slate; product tour added; profile/resume upload scaffolding.
+## Changelog
+- **Feb 2026 (iter 5)** — Major upgrade: 52-topic Aptitude catalog, Gemini-powered question gen + chatbot, Developer profile page, per-user chatbot session isolation, fixed visual-edit babel plugin compile error in DeveloperPage.
+- **Feb 2026 (iter 4)** — Difficulty system for Aptitude/Reasoning, glass-bg CSS fix, question bank hard-tier expansion.
+- **Earlier** — Coding stabilization, theme refactor, product tour, profile/resume scaffolding.

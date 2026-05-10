@@ -6,7 +6,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 
-const STORAGE_KEY = 'chatbot.session_id';
+const STORAGE_KEY_PREFIX = 'chatbot.session_id.';
+const sessionKeyForUser = (userId) => `${STORAGE_KEY_PREFIX}${userId || 'anon'}`;
 
 const TypingDots = () => (
   <div className="flex items-center gap-1 px-4 py-3" data-testid="typing-indicator">
@@ -23,12 +24,24 @@ const TypingDots = () => (
 
 const Chatbot = () => {
   const { user } = useAuth();
+  const userId = user?.id || user?.user_id || user?.email;
   const [open, setOpen] = useState(false);
-  const [sessionId, setSessionId] = useState(() => localStorage.getItem(STORAGE_KEY) || null);
+  const [sessionId, setSessionId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
   const scrollRef = useRef(null);
+
+  // Load this user's session id on mount/userId change
+  useEffect(() => {
+    if (!userId) {
+      setSessionId(null);
+      setMessages([]);
+      return;
+    }
+    const stored = localStorage.getItem(sessionKeyForUser(userId));
+    setSessionId(stored || null);
+  }, [userId]);
 
   const greeting = () => {
     const name = user?.name || user?.full_name || 'there';
