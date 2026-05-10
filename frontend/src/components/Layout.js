@@ -86,7 +86,7 @@ const Layout = () => {
                     <div className="flex items-center gap-2 mt-1">
                       <Trophy className="w-3 h-3 text-violet-500" />
                       <span className="text-xs text-muted-foreground">Level {profile?.level || 1}</span>
-                      <span className="text-xs text-indigo-400">{profile?.xp || 0} XP</span>
+                      <span className="text-xs text-indigo-400">{profile?.xp || 0} Practice Points</span>
                     </div>
                   </div>
                 </div>

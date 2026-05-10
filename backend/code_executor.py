@@ -41,9 +41,9 @@ def is_boilerplate(code: str) -> bool:
     stripped = code.strip().lower()
     if not stripped:
         return True
-    # Body is just `pass` (Python placeholder)
+    # Body is just `pass` (Python placeholder) after stripping each line
     non_decl_lines = [
-        ln for ln in stripped.splitlines()
+        ln.strip() for ln in stripped.splitlines()
         if ln.strip() and not ln.strip().startswith(("#", "def ", "class ", "import ", "from "))
     ]
     if non_decl_lines == ["pass"]:

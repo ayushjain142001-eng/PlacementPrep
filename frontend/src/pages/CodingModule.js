@@ -415,44 +415,38 @@ Please check your code and try again.`;
               className="glass p-6 rounded-2xl space-y-4 border border-border"
             >
               <h3 className="font-semibold text-lg flex items-center gap-2">
-                <Trophy className="w-5 h-5 text-violet-500" />
+                <Trophy className="w-5 h-5 text-blue-500" />
                 Submission Results
               </h3>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 p-4 rounded-lg border border-emerald-500/20">
                   <div className="text-sm text-muted-foreground mb-1">Tests Passed</div>
                   <div className="text-2xl font-bold text-emerald-400">
-                    {testResults.passed_tests || 0} / {testResults.total_tests || 0}
+                    {testResults.passed ?? 0} / {testResults.total ?? 0}
                   </div>
                 </div>
                 <div className="bg-gradient-to-br from-indigo-500/10 to-blue-500/10 p-4 rounded-lg border border-indigo-500/20">
-                  <div className="text-sm text-muted-foreground mb-1">Code Quality</div>
-                  <div className="text-2xl font-bold text-indigo-400">
-                    {testResults.quality || 0}/30
+                  <div className="text-sm text-muted-foreground mb-1">Status</div>
+                  <div className={`text-2xl font-bold ${testResults.is_correct ? 'text-emerald-400' : 'text-amber-400'}`}>
+                    {testResults.is_correct ? 'Accepted' : 'Failing'}
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-violet-500/10 to-purple-500/10 p-4 rounded-lg border border-violet-500/20">
+              <div className="bg-gradient-to-br from-indigo-500/10 to-blue-500/10 p-4 rounded-lg border border-indigo-500/20">
                 <div className="text-sm text-muted-foreground mb-1">Score</div>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-bold text-violet-400">{testResults.score}%</span>
-                  <span className="text-sm text-muted-foreground">+{testResults.xp} XP</span>
+                  <span className="text-4xl font-bold text-blue-400">{testResults.score}%</span>
+                  {testResults.xp > 0 && (
+                    <span className="text-sm text-muted-foreground">+{testResults.xp} XP</span>
+                  )}
                 </div>
               </div>
 
-              {testResults.feedback && testResults.feedback.length > 0 && (
-                <div className="space-y-2">
-                  <h4 className="font-medium text-foreground">Feedback:</h4>
-                  <div className="space-y-1">
-                    {testResults.feedback.map((fb, idx) => (
-                      <div key={idx} className="flex items-start gap-2 text-sm text-foreground">
-                        <span className="text-violet-500 mt-1">•</span>
-                        <span>{fb}</span>
-                      </div>
-                    ))}
-                  </div>
+              {testResults.error && (
+                <div className="bg-red-500/10 border border-red-500/30 p-3 rounded-lg text-sm text-red-300">
+                  ⚠️ {testResults.error}
                 </div>
               )}
 
