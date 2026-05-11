@@ -139,32 +139,34 @@ const ReasoningModule = () => {
         mode: mode
       });
 
-      setResults([...results, {
+      setResults(prev => [...prev, {
         question: question.title,
         correct: response.data.attempt.is_correct,
         score: response.data.attempt.score
       }]);
 
-      toast.success(`+${response.data.xp_earned} XP earned!`);
-
-      if (currentQuestion < questions.length - 1) {
-        setCurrentQuestion(currentQuestion + 1);
-        setSelectedAnswer(null);
-        setTimeLeft(questions[currentQuestion + 1]?.time_limit || 90);
-        setIsActive(true);
-      } else {
-        setView('results');
+      if (response.data.xp_earned) {
+        toast.success(`+${response.data.xp_earned} XP earned!`);
       }
     } catch (error) {
-      toast.error('Failed to submit answer');
-      if (currentQuestion < questions.length - 1) {
-        setCurrentQuestion(currentQuestion + 1);
-        setSelectedAnswer(null);
-        setTimeLeft(questions[currentQuestion + 1]?.time_limit || 90);
-        setIsActive(true);
-      } else {
-        setView('results');
-      }
+      const msg = error?.response?.data?.detail;
+      toast.error(typeof msg === 'string' ? msg : 'Failed to submit answer');
+      // Record locally so progress isn't lost
+      const isCorrect = (question.correct_answer || '').trim().toLowerCase() === (selectedAnswer || '').trim().toLowerCase();
+      setResults(prev => [...prev, {
+        question: question.title,
+        correct: isCorrect,
+        score: isCorrect ? 100 : 0,
+      }]);
+    }
+
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+      setSelectedAnswer(null);
+      setTimeLeft(questions[currentQuestion + 1]?.time_limit || 90);
+      setIsActive(true);
+    } else {
+      setView('results');
     }
   };
 

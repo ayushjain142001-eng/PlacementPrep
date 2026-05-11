@@ -23,6 +23,7 @@ class TestMode(str, Enum):
     PRACTICE = "practice"
     MOCK_TEST = "mock_test"
     REVISION = "revision"
+    TEST = "test"  # alias used by Aptitude/Reasoning frontend — treated like mock_test
 
 # User Models
 class User(BaseModel):

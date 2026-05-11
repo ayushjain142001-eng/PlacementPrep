@@ -286,14 +286,17 @@ Please check your code and try again.`;
 
   const handleLanguageChange = (e) => {
     const newLanguage = e.target.value;
-    
-    // Confirm if user has written code
-    if (code !== LANGUAGE_TEMPLATES[language](questions[currentQuestion])) {
-      if (!window.confirm(`Switching language will reset your code. Continue?`)) {
+    if (newLanguage === language) return;
+
+    // Confirm if user has modified the boilerplate
+    const currentBoilerplate = LANGUAGE_TEMPLATES[language](questions[currentQuestion]);
+    if (code && code.trim() !== currentBoilerplate.trim()) {
+      if (!window.confirm('Switching language will reset your code. Continue?')) {
         return;
       }
     }
-    
+
+    // Apply new language. The useEffect on [language] will reset code+output+editor.
     setLanguage(newLanguage);
   };
 
@@ -331,22 +334,29 @@ Please check your code and try again.`;
             Question {currentQuestion + 1} of {questions.length}
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="glass px-4 py-2 rounded-lg border border-border">
-            <span className="text-sm text-muted-foreground mr-2">Language:</span>
-            <span className="font-semibold text-foreground">{language.toUpperCase()}</span>
+        <div className="flex flex-col md:items-end gap-2">
+          <div className="flex items-center gap-3">
+            <div className="glass px-4 py-2 rounded-lg border border-border">
+              <span className="text-sm text-muted-foreground mr-2">Language:</span>
+              <span className="font-semibold text-foreground">{language.toUpperCase()}</span>
+            </div>
+            <select
+              value={language}
+              onChange={handleLanguageChange}
+              className="glass px-4 py-2 rounded-lg border border-border focus:border-indigo-500 outline-none cursor-pointer hover:border-indigo-400 transition-colors"
+              data-testid="language-selector"
+            >
+              <option value="python">🐍 Python</option>
+              <option value="javascript">📜 JavaScript</option>
+              <option value="java">☕ Java</option>
+              <option value="cpp">⚡ C++</option>
+            </select>
           </div>
-          <select
-            value={language}
-            onChange={handleLanguageChange}
-            className="glass px-4 py-2 rounded-lg border border-border focus:border-indigo-500 outline-none cursor-pointer hover:border-indigo-400 transition-colors"
-            data-testid="language-selector"
-          >
-            <option value="python">🐍 Python</option>
-            <option value="javascript" disabled>📜 JavaScript (coming soon)</option>
-            <option value="java" disabled>☕ Java (coming soon)</option>
-            <option value="cpp" disabled>⚡ C++ (coming soon)</option>
-          </select>
+          {language !== 'python' && (
+            <p className="text-xs text-amber-500/80" data-testid="language-runtime-notice">
+              ⓘ Practice mode only. Test execution currently supports Python.
+            </p>
+          )}
         </div>
       </div>
 
