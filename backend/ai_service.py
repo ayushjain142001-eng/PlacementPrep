@@ -1,8 +1,6 @@
 """Gemini-backed AI service: question generation + chatbot.
 
-Uses emergentintegrations.LlmChat with the EMERGENT_LLM_KEY universal key.
-Architecture is provider-agnostic — model and provider are read from env so
-swap-out is trivial.
+Uses Google's genai SDK directly with GEMINI_API_KEY.
 """
 from __future__ import annotations
 
@@ -10,22 +8,22 @@ import json
 import logging
 import os
 import re
-import uuid
 from typing import Any, Dict, List, Optional
 
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+from google import genai
+from google.genai import types
 
 logger = logging.getLogger(__name__)
 
-LLM_PROVIDER = os.environ.get("LLM_PROVIDER", "gemini")
 LLM_MODEL = os.environ.get("LLM_MODEL", "gemini-2.5-pro")
 
 
-def _api_key() -> str:
-    key = os.environ.get("EMERGENT_LLM_KEY")
+def _get_client() -> genai.Client:
+    """Get a configured Gemini client."""
+    key = os.environ.get("GEMINI_API_KEY")
     if not key:
-        raise RuntimeError("EMERGENT_LLM_KEY missing in backend/.env")
-    return key
+        raise RuntimeError("GEMINI_API_KEY missing in backend/.env")
+    return genai.Client(api_key=key)
 
 
 # ---------------- Question Generation ----------------
@@ -76,14 +74,16 @@ async def generate_questions(
         f"{QUESTION_SCHEMA_HINT}"
     )
 
-    chat = LlmChat(
-        api_key=_api_key(),
-        session_id=f"qgen-{uuid.uuid4()}",
-        system_message=QUESTION_GEN_SYSTEM,
-    ).with_model(LLM_PROVIDER, LLM_MODEL)
-
     try:
-        raw = await chat.send_message(UserMessage(text=prompt))
+        client = _get_client()
+        response = await client.aio.models.generate_content(
+            model=LLM_MODEL,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                system_instruction=QUESTION_GEN_SYSTEM,
+            ),
+        )
+        raw = response.text or ""
     except Exception as e:
         logger.error("Question generation LLM call failed: %s", e)
         return []
@@ -196,15 +196,16 @@ async def chatbot_reply(*, session_id: str, history: List[Dict[str, str]], user_
             + "Continue the conversation naturally."
         )
 
-    chat = LlmChat(
-        api_key=_api_key(),
-        session_id=session_id,
-        system_message=system,
-    ).with_model(LLM_PROVIDER, LLM_MODEL)
-
     try:
-        reply = await chat.send_message(UserMessage(text=user_text))
-        return (reply or "").strip()
+        client = _get_client()
+        response = await client.aio.models.generate_content(
+            model=LLM_MODEL,
+            contents=user_text,
+            config=types.GenerateContentConfig(
+                system_instruction=system,
+            ),
+        )
+        return (response.text or "").strip()
     except Exception as e:
         logger.error("Chatbot LLM call failed: %s", e)
         return (
